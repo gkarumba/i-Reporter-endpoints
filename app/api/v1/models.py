@@ -14,7 +14,10 @@ class Reports:
             "locationName": location,
             "statusMode": status
         }
-        self.db.append(report)
+        self.db.append(data)
+        return self.db
+    
+    def get_report_list(self):
         return self.db
     
     def get_single_report(self,reportID):

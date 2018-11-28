@@ -21,8 +21,19 @@ class ReportLists(Resource, Reports):
             "message": "Report has been created successfully",
             "new report" : resp
         }), 201)
+
+    def get(self):
+        resp = self.db.get_report_list()
+        return make_response(jsonify({
+            "Message":"OK",
+            "Report": resp 
+        }), 200)
         
 class SingleReport(Resource, Reports):
+    
+    def __init__(self):
+        self.db = Reports()
+
     def get(self,id):
         single_report = self.db.get_single_report(id)
         if single_report:
