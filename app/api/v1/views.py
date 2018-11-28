@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, make_response, request
 
-from models import Reports
+from models import Reports, incident
 
 class ReportLists(Resource, Reports):
     
@@ -69,3 +69,26 @@ class EditReport(Resource, Reports):
                 "message":"Report editted successfully",
                 "data": updated_report
             }), 201)
+
+class DeleteReport(Resource, Reports):
+    
+    def __init__(self):
+        self.db = Reports()
+    
+    def delete(self, id):
+            repo = self.db.get_single_report(id)
+            if repo:
+                incident.remove(repo[0])
+                return make_response(jsonify({
+            "message":"Report has been deleted successfully"
+        }), 200)
+            else:
+                return make_response(jsonify({
+                "message":"ID invalid, no report found"
+            }), 400)
+
+
+
+
+
+
