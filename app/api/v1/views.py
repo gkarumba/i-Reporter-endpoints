@@ -47,3 +47,25 @@ class SingleReport(Resource, Reports):
                 "message":"Invalid ID"
             }
             return make_response(jsonify(response), 400)
+
+class EditReport(Resource, Reports):
+    
+    def __init__(self):
+        self.db = Reports()
+
+    def put(self, id):
+        ereport = self.db.get_by_id(id)
+        if ereport:
+            data = request.get_json()
+            new_createdOn = data['reportedAt']
+            new_createdBy = data['username']
+            new_type = data['redflags_intervention']
+            new_location = data['location']
+            new_status = data['statusMode']
+
+            updated_report = self.db.edit_single_report(id, new_createdOn, new_createdBy,new_type, new_location, new_status)
+            
+            return make_response(jsonify({
+                "message":"Report editted successfully",
+                "data": updated_report
+            }), 201)

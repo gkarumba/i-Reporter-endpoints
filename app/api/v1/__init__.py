@@ -1,4 +1,4 @@
-from views import ReportLists, SingleReport
+from views import ReportLists, SingleReport, EditReport
 
 from flask import Blueprint
 from flask_restful import Api, Resource
@@ -9,3 +9,4 @@ api = Api(version_one)
 
 api.add_resource(ReportLists, '/reports')
 api.add_resource(SingleReport, '/reports/<int:id>')
+api.add_resource(EditReport, '/reports/<int:id>/edit')
