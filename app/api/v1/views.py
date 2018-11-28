@@ -21,3 +21,18 @@ class ReportLists(Resource, Reports):
             "message": "Report has been created successfully",
             "new report" : resp
         }), 201)
+        
+class SingleReport(Resource, Reports):
+    def get(self,id):
+        single_report = self.db.get_single_report(id)
+        if single_report:
+            return make_response(jsonify({
+                "message":"OK",
+                "report": single_report 
+            }), 200)
+
+        else: 
+            response = {
+                "message":"Invalid ID"
+            }
+            return make_response(jsonify(response), 400)

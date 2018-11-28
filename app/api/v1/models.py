@@ -17,4 +17,10 @@ class Reports:
         self.db.append(report)
         return self.db
     
+    def get_single_report(self,reportID):
+        single_report = [repo for repo in self.db if repo['id'] == reportID]
+        if single_report:
+            return single_report
+        else:
+            return False
     
