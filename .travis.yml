@@ -7,3 +7,6 @@ install:
 # command to run tests
 script:
   - nosetests --with-coverage --cover-package=app
+
+after_success:
+  - coveralls
