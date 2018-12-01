@@ -54,8 +54,8 @@ class EditReport(Resource, Reports):
         self.db = Reports()
 
     def put(self, id):
-        ereport = self.db.get_by_id(id)
-        if ereport:
+        report_edit = self.db.get_by_id(id)
+        if report_edit:
             data = request.get_json()
             new_createdOn = data['reportedAt']
             new_createdBy = data['username']
