@@ -1,4 +1,4 @@
-from views import ReportLists, SingleReport, EditReport, DeleteReport
+from .views import ReportLists, SingleReport, EditReport, DeleteReport
 
 from flask import Blueprint
 from flask_restful import Api, Resource

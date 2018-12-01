@@ -58,12 +58,12 @@ class TestReportCreation(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn('Report editted successfully', str(result))
 
-    #def test_DELETE_remove_report(self):
-        #self.app.post('/api/v1/reports', data=json.dumps(self.data), content_type='application/type')
-        #response = self.app.delete('/api/v1/reports/1')
-        #result = json.loads(response.data)
-        #self.assertEqual(response.status_code, 200)
-        #self.assertIn('Report has been deleted successfully', str(result))
+    def test_DELETE_remove_report(self):
+        self.app.post('/api/v1/reports', data=json.dumps(self.data), content_type='application/json')
+        response = self.app.delete('/api/v1/reports/1')
+        result = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Report has been deleted successfully', str(result))
 
     
 
