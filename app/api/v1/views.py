@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, make_response, request
 
-from .models import Reports, incident
+from .models import Reports, incident, db
 
 class ReportLists(Resource):
     
@@ -11,7 +11,7 @@ class ReportLists(Resource):
         createdBy = data['username']
         type = data['flag']
         location = data['location']
-        status = data['statusMode']
+        status = data['status']
        
         new_report = Reports(createdBy, type, location, status)
         incident.append(new_report)
@@ -27,10 +27,12 @@ class ReportLists(Resource):
             "Report": [get_report.serialize() for get_report in incident] 
         }), 200)
         
-class SingleReport(Resource):
-    
+class SingleReport(Resource,db):
+    def __init__(self):
+        self.mydb = db()
+
     def get(self,id):
-        report = Reports().get_by_id(id)
+        report = self.mydb.get_by_id(id)
         if report:
             return make_response(jsonify({
                 "message":"OK",
@@ -43,17 +45,19 @@ class SingleReport(Resource):
             }
             return make_response(jsonify(response), 400)
 
-class EditReport(Resource, Reports):
-    
+class EditReport(Resource, db):
+    def __init__(self):
+        self.mydb = db()
+
     def put(self, id):
-        report = Reports().get_by_id(id)
-        data = request.get_json(force=True)
+        report = self.mydb.get_by_id(id)
+        
         if report:
             data = request.get_json()
             report.createdBy = data['username']
             report.type = data['flag']
             report.location = data['location']
-            report.status = data['statusMode']
+            report.status = data['status']
             return make_response(jsonify({
                 "message":"Report edited successfully",
                 "data": report.serialize()
@@ -63,10 +67,12 @@ class EditReport(Resource, Reports):
                 "message": "ID invalid, no report found"
             }),400)
 
-class DeleteReport(Resource, Reports):
-    
+class DeleteReport(Resource, db):
+    def __init__(self):
+        self.mydb = db()
+
     def delete(self, id):
-            report = Reports().get_by_id(id)
+            report = self.mydb.get_by_id(id)
             if report:
                 incident.remove(report)
                 return make_response(jsonify({
