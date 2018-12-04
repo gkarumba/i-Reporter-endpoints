@@ -3,43 +3,38 @@ from flask import jsonify, make_response, request
 
 from .models import Reports, incident
 
-class ReportLists(Resource, Reports):
+class ReportLists(Resource):
     
-    def __init__(self):
-        self.db = Reports()
-
     def post(self):
-        data = request.get_json()
-        createdOn = data['reportedAt']
+        data = request.get_json(force=True)
+        
         createdBy = data['username']
-        type = data['redflags_intervention']
+        type = data['flag']
         location = data['location']
         status = data['statusMode']
+       
+        new_report = Reports(createdBy, type, location, status)
+        incident.append(new_report)
 
-        resp = self.db.create_report(createdOn, createdBy, type, location, status)
         return make_response(jsonify({
             "message": "Report has been created successfully",
-            "new report" : resp
+            "new report" : new_report.serialize()
         }), 201)
 
     def get(self):
-        resp = self.db.get_report_list()
         return make_response(jsonify({
             "Message":"OK",
-            "Report": resp 
+            "Report": [get_report.serialize() for get_report in incident] 
         }), 200)
         
-class SingleReport(Resource, Reports):
+class SingleReport(Resource):
     
-    def __init__(self):
-        self.db = Reports()
-
     def get(self,id):
-        single_report = self.db.get_single_report(id)
-        if single_report:
+        report = Reports().get_by_id(id)
+        if report:
             return make_response(jsonify({
                 "message":"OK",
-                "report": single_report 
+                "report": report.serialize()
             }), 200)
 
         else: 
@@ -50,35 +45,30 @@ class SingleReport(Resource, Reports):
 
 class EditReport(Resource, Reports):
     
-    def __init__(self):
-        self.db = Reports()
-
     def put(self, id):
-        report_edit = self.db.get_by_id(id)
-        if report_edit:
+        report = Reports().get_by_id(id)
+        data = request.get_json(force=True)
+        if report:
             data = request.get_json()
-            new_createdOn = data['reportedAt']
-            new_createdBy = data['username']
-            new_type = data['redflags_intervention']
-            new_location = data['location']
-            new_status = data['statusMode']
-
-            updated_report = self.db.edit_single_report(id, new_createdOn, new_createdBy,new_type, new_location, new_status)
-            
+            report.createdBy = data['username']
+            report.type = data['flag']
+            report.location = data['location']
+            report.status = data['statusMode']
             return make_response(jsonify({
-                "message":"Report editted successfully",
-                "data": updated_report
+                "message":"Report edited successfully",
+                "data": report.serialize()
             }), 201)
+        else:
+            return make_response(jsonify({
+                "message": "ID invalid, no report found"
+            }),400)
 
 class DeleteReport(Resource, Reports):
     
-    def __init__(self):
-        self.db = Reports()
-    
     def delete(self, id):
-            repo = self.db.get_single_report(id)
-            if repo:
-                incident.remove(repo[0])
+            report = Reports().get_by_id(id)
+            if report:
+                incident.remove(report)
                 return make_response(jsonify({
             "message":"Report has been deleted successfully"
         }), 200)
