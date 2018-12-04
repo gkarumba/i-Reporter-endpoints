@@ -8,25 +8,20 @@ class TestReportCreation(unittest.TestCase):
         create_app().testing = True
         self.app  = create_app().test_client()
         self.data = {
-            "id": 1,
-            "reportedAt": "1500hrs",
             "username": "john",
-            "redflags_intervention": "redflag",
+            "flag": "redflag",
             "location": "PAC",
             "statusMode": "resolved"
         }
         self.data1 = {
-            "id": 1,
-            "reportedAt": "1300hrs",
             "username": "peter",
-            "redflags_intervention": "redflag",
+            "flag": "redflag",
             "location": "PAC",
             "statusMode": "resolved"
         } 
         self.data2 = {
-            "reportedAt": "1300hrs",
             "username": "peter",
-            "redflags_intervention": "redflag",
+            "flag": "redflag",
             "location": "PAC",
             "statusMode": "resolved"
         }

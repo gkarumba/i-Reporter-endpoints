@@ -1,52 +1,33 @@
+from datetime import datetime
+
 incident = []
-
 class Reports:
-    
-    def __init__(self):
-        self.db = incident
+    report_id = 1
+    def __init__(self, username=None,flag=None,location=None,status=None):
+        self.id = Reports.report_id,
+        self.createdOn = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.createdBy = username
+        self.type = flag
+        self.location = location
+        self.status = status
 
-    def create_report(self, createdOn, createdBy, type, location, status):
-        data = {
-            "id": len(self.db)+1,
-            "reportedAt": createdOn,
-            "userName": createdBy,
-            "redflag_intervention": type,
-            "locationName": location,
-            "statusMode": status
-        }
-        self.db.append(data)
-        return self.db
+        Reports.report_id += 1
     
-    def get_report_list(self):
-        return self.db
-    
-    def get_single_report(self,reportID):
-        single_report = [repo for repo in self.db if repo['id'] == reportID]
-        if single_report:
-            return single_report
-        else:
-            return False
-
     def get_by_id(self, ID):
-        get_id = [get_id for get_id in self.db if get_id['id'] == ID]
-        if get_id:
-            return True
-        else: 
-            return False
-
-    def edit_single_report(self, reportID, new_createdOn, new_createdBy, new_type, new_location, new_status):
-        edit_report = [repo for repo in self.db if repo['id'] == reportID]
-        if edit_report:
-            edit_report[0]['reportedAt'] = new_createdOn
-            edit_report[0]['userName'] = new_createdBy
-            edit_report[0]['redflag_intervention'] = new_type
-            edit_report[0]['locationName'] = new_location
-            edit_report[0]['statusMode'] = new_status
+        for get_id in incident:
+            if get_id.id == ID:
+                return get_id
         
-            return edit_report[0]
-        else:
-            return "Error no report found"
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "date_time": self.createdOn,
+            "username": self.createdBy,
+            "flag": self.type,
+            "location":self.location,
+            "status": self.status
+        }
    
         
 
