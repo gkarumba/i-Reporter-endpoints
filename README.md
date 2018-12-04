@@ -39,7 +39,7 @@ To run the flask app
 
 To test the endpoints ensure that `Postman` is installed in the local machine
 Run `Postman` and set the localhost to `http://127.0.0.1:5000/`
-Add the localhost with urls for the various endpoints, for example: `http://127.0.0.1:5000/api/v1/reports` then start sending the requests
+Add the localhost with urls for the various endpoints, for example: `http://127.0.0.1:5000/api/v1/reports` then start sending the requests e.g `POST` `http://127.0.0.1:5000/api/v1/reports` payload`{"username":"", "flag":"", "location":"", "statusmode":""}`
 
 
 ## Deployment
