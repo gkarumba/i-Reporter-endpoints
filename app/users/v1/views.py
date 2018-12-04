@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import make_response, jsonify, request
+from werkzeug.security import check_password_hash
 from .models import User
 
 class Registration(Resource):
@@ -41,5 +42,39 @@ class Registration(Resource):
         return make_response(jsonify({
                 'message' : 'Account created successfully '
             }), 201)
+
+class SignIn(Resource):
+    def post(self):
+        try: 
+            data = request.get_json()
+            email = data['email']
+            password = data['password']
+
+        except:
+            return make_response(jsonify({
+                "message": "Data is empty"
+            }), 200)
+        user = User.get_user_by_email(email)
+        if type(data['email']) != str or type(['password'])!= str:
+            return make_response(jsonify({
+                "message":"email and password should be strings"
+            }))
+        elif not email:
+            return make_response(jsonify({
+                "message":"wrong email address"
+            }), 404)
+        elif not check_password_hash(user.password, password):
+            return make_response(jsonify({
+                "message": "wrong password"
+            }), 400)
+
+        token = create_access_token(identity=(username, user.isAdmin))
+        return make_response(jsonify({
+            'token': token,
+            'message': f'Login was successful{username}',
+            'admin':user.isAdmin
+            }), 200)
+
+    
 
 
