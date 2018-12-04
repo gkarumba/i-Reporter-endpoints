@@ -11,19 +11,19 @@ class TestReportCreation(unittest.TestCase):
             "username": "john",
             "flag": "redflag",
             "location": "PAC",
-            "statusMode": "resolved"
+            "statusmode": "resolved"
         }
         self.data1 = {
             "username": "peter",
             "flag": "redflag",
             "location": "PAC",
-            "statusMode": "resolved"
+            "statusmode": "resolved"
         } 
         self.data2 = {
             "username": "peter",
             "flag": "redflag",
             "location": "PAC",
-            "statusMode": "resolved"
+            "statusmode": "resolved"
         }
     
     def test_POST_create_report(self):
@@ -51,7 +51,7 @@ class TestReportCreation(unittest.TestCase):
         response = self.app.put('api/v1/reports/1/edit', data=json.dumps(self.data1), content_type='application/json')
         result = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
-        self.assertIn('Report editted successfully', str(result))
+        self.assertIn('Report edited successfully', str(result))
 
     def test_DELETE_report(self):
         self.app.post('/api/v1/reports', data=json.dumps(self.data), content_type='application/json')
