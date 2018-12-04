@@ -11,7 +11,7 @@ class ReportLists(Resource):
         createdBy = data['username']
         type = data['flag']
         location = data['location']
-        status = data['status']
+        status = data['statusmode']
        
         new_report = Reports(createdBy, type, location, status)
         incident.append(new_report)
@@ -57,7 +57,7 @@ class EditReport(Resource, db):
             report.createdBy = data['username']
             report.type = data['flag']
             report.location = data['location']
-            report.status = data['status']
+            report.status = data['statusmode']
             return make_response(jsonify({
                 "message":"Report edited successfully",
                 "data": report.serialize()

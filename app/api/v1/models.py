@@ -3,13 +3,13 @@ from datetime import datetime
 incident = []
 class Reports():
    
-    def __init__(self,id, username=None,flag=None,location=None,status=None):
+    def __init__(self,id,createdOn, username=None,flag=None,location=None,statusmode=None):
         self.id = len(incident)+1
         self.createdOn = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.createdBy = username
         self.type = flag
         self.location = location
-        self.status = status
+        self.status = statusmode
 
         
 
@@ -20,7 +20,7 @@ class Reports():
             "username": self.createdBy,
             "flag": self.type,
             "location":self.location,
-            "status": self.status
+            "statusmode":self.status
         }
 
 class db():     
@@ -38,7 +38,7 @@ class db():
             "username": self.createdBy,
             "flag": self.type,
             "location":self.location,
-            "status": self.status
+            "statusmode":self.status
         }
    
         
