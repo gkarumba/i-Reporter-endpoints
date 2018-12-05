@@ -1,80 +1,58 @@
 from flask_restful import Resource
-from flask import make_response, jsonify, request
-from werkzeug.security import check_password_hash
-from .models import User
+from flask import make_response,jsonify, request
+from app.users.v1.models import User
 
 class Registration(Resource):
     
     def post(self):
-        try:
-            data = request.get_json()
-            email = data['email']
-            password = data['password']
-            confirm_password = data['password']
-            firstname = data['firstName']
-            lastname = data['lastName']
-            phonenumber = data['phoneNumber']
-            username = data['userName']
-            registered = data['registered']
-            isAdmin = data['isadmin']
+        data = request.get_json()
+        email = data['email']
+        password = data['password']
+        firstanem = data['firstname']
+        lastname = data['lastname']
+        username = data['username']
+        phonenumber = data['phonenumber']
         
-        if type(data['email']) != str or type(data['password']) != str or type(data['firstName']) or type(data['lastName']) or type(data['phoneNumber']) != int or type(data['userName']) != str:
-            return make_response(jsonify({
-                "message":"email,password and names should be strings, phonenumber should be integers"
-            }))
-
-        if 
-
-
-        if User.get_user_by_email(email):
-            return make_response(jsonify({
-                'message' : 'Account with the provided email already exists. Please login '
-            }), 400)
-
-        if User.get_user_by username(username):
-            return make_response(jsonify({
-                'message' : 'Account with the provided username already exists. Please login '
-            }), 400)
+        if not User.get_user_by_email(email):
+            new_user = User(email=email, password=password)
+            new_user.add_user()
         
-        user = User(email, password,confirm_password,firstname,lastname, phonenumber,username,isAdmin)
-        user.add()
-
-        return make_response(jsonify({
-                'message' : 'Account created successfully '
+            return make_response(jsonify({
+                'message' : 'Your account has successfully been registered '
             }), 201)
+            else:
+                response = {
+                        'message': ' email already exists. Use a different email'
+                        }
+                        return make_response(jsonify(response), 409)
+               
 
-class SignIn(Resource):
-    def post(self):
-        try: 
-            data = request.get_json()
-            email = data['email']
-            password = data['password']
-
-        except:
-            return make_response(jsonify({
-                "message": "Data is empty"
-            }), 200)
-        user = User.get_user_by_email(email)
-        if type(data['email']) != str or type(['password'])!= str:
-            return make_response(jsonify({
-                "message":"email and password should be strings"
-            }))
-        elif not email:
-            return make_response(jsonify({
-                "message":"wrong email address"
-            }), 404)
-        elif not check_password_hash(user.password, password):
-            return make_response(jsonify({
-                "message": "wrong password"
-            }), 400)
-
-        token = create_access_token(identity=(username, user.isAdmin))
-        return make_response(jsonify({
-            'token': token,
-            'message': f'Login was successful{username}',
-            'admin':user.isAdmin
-            }), 200)
-
+        
+class LogIn(Resource):
     
-
-
+    def post(self):
+        data = request.get_json()
+        email = data['email']
+        password = data['password']
+        
+        try:
+            user = User.get_user_by_email(email)
+            user_id = user.id
+            if user and user.validate_password(password):
+                user_token = user.generate_token(user_id)
+                if user_token:
+                    response = {
+                        'message' : 'Login Successful',
+                        'data' : user_token.decode('UTF-8')
+                    }
+                    return make_response(jsonify(response), 200)
+            else:
+                response = {
+                    'message' : 'Invalid password, please try again'
+                }
+                return make_response(jsonify(response), 401)
+        except Exception:
+            response = {
+                'message' : 'wrong email address, use a different email'
+            }
+            return make_response(jsonify(response), 400)
