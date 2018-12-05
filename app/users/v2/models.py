@@ -4,10 +4,7 @@ import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.users.v1.database import ReportDB
 
-
-
 class User:
-    
     def add_user(self, email, password,username, firstname, lastname, phonenumber):
         hash_password = generate_password_hash(password)
         username_query = """SELECT * FROM users WHERE username = '{}'""".format(username)
@@ -36,7 +33,6 @@ class User:
         if not repo:
             return False
         return repo
-        
 
     def validate_password(self, password, email):
         query = """SELECT password FROM users WHERE email='{}'""".format(email)
@@ -46,9 +42,7 @@ class User:
             return False
         return True
 
-    
     def generate_token(self, id):
-       
         try:
             payload = {
                 'exp' : datetime.utcnow()+timedelta(minutes=10),

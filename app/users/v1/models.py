@@ -14,9 +14,7 @@ class MockDb():
 db = MockDb()
 
 class Parent():
-    
     def update(self, data):
-        
         for key in data:
             setattr(self, key, data[key])
         setattr(self, 'last_updated', datetime.utcnow().isoformat())
@@ -34,7 +32,6 @@ class User(Parent):
         
 
     def add_user(self):
-        
         setattr(self, 'id', db.user_no + 1)
         db.users.update({self.id: self})
         db.user_no += 1
@@ -42,19 +39,15 @@ class User(Parent):
         return self.lookup()
 
     def validate_password(self, password):
-        
         if check_password_hash(self.password, password):
             return True
         return False
     
     def lookup(self):
-        
         keys = ['email', 'id']
         return {key: getattr(self, key) for key in keys}
 
-
-    def generate_user_token(self, userID):
-            
+    def generate_user_token(self, userID):  
         try:
             payload = {
                 'exp': datetime.utcnow()+timedelta(minutes=10),

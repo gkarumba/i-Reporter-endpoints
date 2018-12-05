@@ -2,13 +2,11 @@ from flask_restful import Resource
 from flask import make_response,jsonify, request
 from app.users.v2.models import User
 
-
 user = User()
 
 class Registration(Resource):
     
     def post(self):
-        
         try:
             data = request.get_json()
             password = data['password']
@@ -18,7 +16,6 @@ class Registration(Resource):
             lastname = data['lastname']
             phonenumber = data['phonenumber']
         except Exception:
-            
             return make_response(jsonify({
                 'message' : 'Invalid key field'
             }), 400)
@@ -26,26 +23,21 @@ class Registration(Resource):
         new_user = user.add_user(email, password, username, firstname, lastname, phonenumber)
         
         if not new_user:
-            response = {
+            return make_response(jsonify({
                 'message' : 'Email already exists'
-            }
-            return make_response(jsonify(response), 400)
-
-
+            }), 400)
         return make_response(jsonify({
             'message' : 'Account Registered Successfully',
             'data' : new_user
         }), 201)
 
 class LogIn(Resource):
-    
     def post(self):
         try:
             data = request.get_json()
             email = data['email']
             password = data['password']
         except Exception:
-            
             return make_response(jsonify({
                 'message' : 'Invalid data, try again'
             }), 400)
@@ -53,7 +45,6 @@ class LogIn(Resource):
         user_login = user.get_user_by_email(email)
 
         if not user_login:
-            
             return make_response(jsonify( {
                 'message' : 'incorrect login credentials. please enter details again'
             }), 401)
@@ -61,7 +52,6 @@ class LogIn(Resource):
         user_id = queried_user[0]['id']
         valid_password = user.validate_password(password, email)
         if not check_password:
-            
             return make_response(jsonify({
                 'message' : 'incorrect login credentials. please enter details again'
             }), 401)
@@ -74,6 +64,6 @@ class LogIn(Resource):
         
         return make_response(jsonify({
             'message' : 'Successfully logged in',
-            'data' : auth_token.decode()
+            'data' : user_token.decode()
         }), 200)
       
