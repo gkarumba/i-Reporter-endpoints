@@ -7,7 +7,7 @@ class MockDb():
     def __init__(self):
         self.users = {}
         self.reports = {}
-        
+        self.user_no = 0
     def drop(self):
         self.__init__()
 
@@ -21,8 +21,7 @@ class Parent():
         return self.lookup()
 
 class User(Parent):
-    def __init__(self,id,email=None, password=None,firstname=None,lastname=None,phonenumber=None,username=None):
-        self.id = None
+    def __init__(self,email=None,password=None,firstname=None,lastname=None,phonenumber=None,username=None):
         self.email = email
         self.password = generate_password_hash(password)
         self.firstname = firstname
@@ -35,7 +34,7 @@ class User(Parent):
         setattr(self, 'id', db.user_no + 1)
         db.users.update({self.id: self})
         db.user_no += 1
-        db.orders.update({self.id: {}})
+        db.reports.update({self.id: {}})
         return self.lookup()
 
     def validate_password(self, password):

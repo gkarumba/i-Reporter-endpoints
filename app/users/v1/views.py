@@ -35,24 +35,25 @@ class LogIn(Resource):
         email = data['email']
         password = data['password']
         
-        try:
-            user = User.get_user_by_email(email)
-            user_id = user.id
-            if user and user.validate_password(password):
-                user_token = user.generate_token(user_id)
-                if user_token:
-                    response = {
-                        'message' : 'Login Successful',
-                        'data' : user_token.decode('UTF-8')
-                    }
-                    return make_response(jsonify(response), 200)
-            else:
-                response = {
-                    'message' : 'Invalid password, please try again'
-                }
-                return make_response(jsonify(response), 401)
-        except Exception:
+        
+        user = User.get_user_by_email(email)
+        if not user:
             response = {
                 'message' : 'wrong email address, use a different email'
             }
             return make_response(jsonify(response), 400)
+        user_id = user.id
+            
+        if user and user.validate_password(password):
+            user_token = user.generate_user_token(user_id)
+            if user_token:
+                response = {
+                    'message' : 'Login Successful',
+                }
+                return make_response(jsonify(response), 200)
+        else:
+            response = {
+                'message' : 'Invalid password, please try again'
+            }
+            return make_response(jsonify(response), 401)
+        
