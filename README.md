@@ -42,7 +42,7 @@ Add the localhost with urls for the various endpoints, for example: `http://127.
 
 ## Deployment
 
-The APIs is hosted on [HEROKU] and can be access via : https://i-reporter-gkarumba.herokuapp.com/
+The APIs is hosted on HEROKU and can be access via : [HEROKU](https://i-reporter-gkarumba.herokuapp.com/)
 
 ## Running nosetests
 run the following command on terminal : `nosetests --with-coverage --cover-package=app`
