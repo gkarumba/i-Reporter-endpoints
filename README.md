@@ -5,13 +5,11 @@
 This repo is a build of the API endpoints for an online reporting platform
 
 ## RESTful API Endpoints for ireporter
-| Method        |       Endpoint                        |         Description                           |
-| ------------- |       -------------                   |         -------------                         |
-| `POST`        | `/api/v1/reports`                     |   Creates a new report                        |
-| `GET`         | `/api/v1/reports`                     |   Gets all reports                            |
-| `GET`         | `/api/v1/reports/<reportid>`          |   Gets a single report by id                  |
-| `PUT`         | `/api/v1/reports/<reportid>/edit`     |   Edit a specific report by id                |
-| `DELETE`      | `/api/v1/reports/<reportid>`          |   Deletes a specific report by id             |
+| Method        |       Endpoint                    |         Description               |    Example         |
+| ------------- |       -------------               |         -------------             |  ------------      |
+| `POST`        | `/api/v1/reports`                 |   Creates a new report            |    `POST`          |
+| `GET`         | `/api/v1/reports`                 |   Gets all reports                |    payload = {     || `GET`         | `/api/v1/reports/<reportid>`      |   Gets a single report by id      |   `"username":"",` || `PUT`         | `/api/v1/reports/<reportid>/edit` |   Edit a specific report by id    |     `"flag":"",`   || `DELETE`      | `/api/v1/reports/<reportid>`      |   Deletes a specific report by id |    `"location":"",`||               |                                   |                                   |  `"statusmode":""}`|
+                                                                                    
 
 ## Getting Started
 
