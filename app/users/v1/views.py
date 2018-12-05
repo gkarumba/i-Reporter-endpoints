@@ -8,23 +8,23 @@ class Registration(Resource):
         data = request.get_json()
         email = data['email']
         password = data['password']
-        firstanem = data['firstname']
+        firstname = data['firstname']
         lastname = data['lastname']
         username = data['username']
         phonenumber = data['phonenumber']
         
         if not User.get_user_by_email(email):
-            new_user = User(email=email, password=password)
+            new_user = User(email=email, password=password, firstname=firstname, lastname=lastname,username=username,phonenumber=phonenumber)
             new_user.add_user()
         
             return make_response(jsonify({
                 'message' : 'Your account has successfully been registered '
             }), 201)
-            else:
-                response = {
-                        'message': ' email already exists. Use a different email'
-                        }
-                        return make_response(jsonify(response), 409)
+        else:
+            response = {
+                    'message': ' email already exists. Use a different email'
+                    }
+            return make_response(jsonify(response), 409)
                
 
         

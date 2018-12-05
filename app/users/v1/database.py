@@ -27,7 +27,7 @@ class ReportDB:
         type VARCHAR(24) NOT NULL,
         location VARCHAR(30) NOT NULL,
         status VARCHAR (24) NOT NULL
-        )"""
+        );""")
         cls.conn.commit()
  
     @classmethod
@@ -59,9 +59,9 @@ class ReportDB:
         return resp
     
     @classmethod
-     def drop_table(cls):
-         cls.cur.execute("""
-             DROP TABLE IF EXISTS users CASCADE;\
-             DROP TABLE IF EXISTS reports CASCADE;""")
-         cls.conn.commit()
+    def drop_table(cls):
+        cls.cur.execute("""
+            DROP TABLE IF EXISTS users CASCADE;\
+            DROP TABLE IF EXISTS reports CASCADE;""")
+        cls.conn.commit()
 
