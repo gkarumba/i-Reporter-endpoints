@@ -1,26 +1,39 @@
 from flask_restful import Resource
 from flask import jsonify, make_response, request
-
 from .models import Reports, incident, db
+from app.utilities.validators import isValidUsername,isBlank
 
 class ReportLists(Resource):
     
     def post(self):
-        data = request.get_json(force=True)
+        data = request.get_json()
         
         createdBy = data['username']
-        type = data['flag']
+        type = data['type']
         location = data['location']
-        status = data['statusmode']
-       
-        new_report = Reports(createdBy, type, location, status)
-        incident.append(new_report)
-
-        return make_response(jsonify({
-            "message": "Report has been created successfully",
-            "new report" : new_report.serialize()
-        }), 201)
-
+        status = data['status']
+        
+        if isValidUsername(createdBy) and isBlank(createdBy):
+            if isBlank(type):
+                if isBlank(location):
+                    if isBlank(status):
+                        new_report = Reports(createdBy, type, location, status)
+                        incident.append(new_report)
+                        return make_response(jsonify({
+                            "message": "Report has been created successfully",
+                            "new report" : new_report.serialize()}), 201)
+                    else:
+                        return make_response(jsonify({
+                            'message':'status cannot be empty'}), 400)
+                else:
+                    return make_response(jsonify({
+                        'message':'location cannot be empty'}),400)
+            else:
+                return make_response(jsonify({
+                    'message':'type cannot be empty'}), 400)
+        else:
+            return make_response(jsonify({
+                'message':'Username cannot be empty and takes letters only'}), 400)        
     def get(self):
         return make_response(jsonify({
             "Message":"OK",

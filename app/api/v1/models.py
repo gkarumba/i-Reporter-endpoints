@@ -3,22 +3,23 @@ from datetime import datetime
 incident = []
 class Reports():
    
-    def __init__(self,id,createdOn, username=None,flag=None,location=None,statusmode=None):
+    def __init__(self,id=None,createdOn=None,username=None,type=None,location=None,status=None):
         self.id = len(incident)+1
         self.createdOn = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.createdBy = username
-        self.type = flag
+        self.type = type
         self.location = location
-        self.status = statusmode
+        self.status = status
+    
     def serialize(self):
         return {
             "id": self.id,
             "date_time": self.createdOn,
             "username": self.createdBy,
-            "flag": self.type,
+            "type": self.type,
             "location":self.location,
-            "statusmode":self.status
-        }
+            "status":self.status
+            }
 
 class db():     
     
@@ -26,14 +27,15 @@ class db():
         for report in incident:
             if report.id == id:
                 return report
+    
     def serialize(self):
         return {
             "id": self.id,
             "date_time": self.createdOn,
             "username": self.createdBy,
-            "flag": self.type,
+            "type": self.type,
             "location":self.location,
-            "statusmode":self.status
+            "status":self.status
         }
    
         
