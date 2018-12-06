@@ -32,4 +32,8 @@ def isNumber(number):
         return False
     return True
 
+def isFlag(check_str):
+    if re.search(r'\bredflag\b|\bintervention\b', check_str):
+        return False
+    return True
         

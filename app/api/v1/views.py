@@ -1,45 +1,56 @@
 from flask_restful import Resource
 from flask import jsonify, make_response, request
-from .models import Reports, incident, db
-from app.utilities.validators import isValidUsername,isBlank
+from .models import Reports, db
+from app.utilities.validators import isValidUsername,isBlank, isFlag
 
 class ReportLists(Resource):
     
     def post(self):
         data = request.get_json()
-        
         createdBy = data['username']
-        type = data['type']
+        flag = data['flag']
         location = data['location']
         status = data['status']
         
-        if isValidUsername(createdBy) and isBlank(createdBy):
-            if isBlank(type):
-                if isBlank(location):
-                    if isBlank(status):
-                        new_report = Reports(createdBy, type, location, status)
-                        incident.append(new_report)
-                        return make_response(jsonify({
-                            "message": "Report has been created successfully",
-                            "new report" : new_report.serialize()}), 201)
-                    else:
-                        return make_response(jsonify({
-                            'message':'status cannot be empty'}), 400)
-                else:
-                    return make_response(jsonify({
-                        'message':'location cannot be empty'}),400)
-            else:
-                return make_response(jsonify({
-                    'message':'type cannot be empty'}), 400)
-        else:
+        if not isValidUsername(createdBy):
             return make_response(jsonify({
-                'message':'Username cannot be empty and takes letters only'}), 400)        
+                'message':'Username takes letters only'
+            }), 400)
+
+        if not isBlank(createdBy):
+            return make_response(jsonify({
+                'message':'Username cannot be empty'
+            }), 400)
+
+        if not isBlank(flag) and isFlag(flag):
+            return make_response(jsonify({
+                'message':'type cannot be empty'
+            }), 400)
+
+        if not isBlank(location):
+            return make_response(jsonify({
+                'message':'location cannot be empty'
+            }),400)
+
+        if not isBlank(status):
+            return make_response(jsonify({
+                'message':'status cannot be empty'
+            }), 400)
+
+        new_report = Reports(createdBy, flag, location, status)
+        payload = new_report.add_to_db()
+        return make_response(jsonify({
+            "message": "Report has been created successfully",
+            "data" : payload
+        }), 201)
+
     def get(self):
         return make_response(jsonify({
             "Message":"OK",
-            "Report": [get_report.serialize() for get_report in incident] 
+            "data": [get_report.serialize() for get_report in incident] 
         }), 200)
-        
+    
+
 class SingleReport(Resource,db):
     def __init__(self):
         self.mydb = db()
@@ -49,7 +60,7 @@ class SingleReport(Resource,db):
         if report:
             return make_response(jsonify({
                 "message":"OK",
-                "report": report.serialize()
+                "data": report.serialize()
             }), 200)
 
         else: 
