@@ -10,9 +10,6 @@ class Reports():
         self.type = flag
         self.location = location
         self.status = statusmode
-
-        
-
     def serialize(self):
         return {
             "id": self.id,
@@ -29,8 +26,6 @@ class db():
         for report in incident:
             if report.id == id:
                 return report
-        
-
     def serialize(self):
         return {
             "id": self.id,

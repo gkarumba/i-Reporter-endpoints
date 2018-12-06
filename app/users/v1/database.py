@@ -5,8 +5,9 @@ from psycopg2.extras import RealDictCursor
 
 class ReportDB:
     @classmethod
-    def init_db(cls, uri):
-        cls.conn = psycopg2.connect(uri)
+    def init_db(cls,DATABASE_URI):
+        conn_string = "host='localhost' dbname='test_reporter' user='karumba' password='123456'"
+        cls.conn = psycopg2.connect(conn_string)
         cls.cur = cls.conn.cursor(cursor_factory=RealDictCursor)
 
     @classmethod
@@ -29,6 +30,7 @@ class ReportDB:
         status VARCHAR (24) NOT NULL
         );""")
         cls.conn.commit()
+
  
     @classmethod
     def save_to_db(cls,query_string, tuple_data):
@@ -64,4 +66,8 @@ class ReportDB:
             DROP TABLE IF EXISTS users CASCADE;\
             DROP TABLE IF EXISTS reports CASCADE;""")
         cls.conn.commit()
+
+
+
+
 

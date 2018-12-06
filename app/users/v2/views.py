@@ -20,7 +20,7 @@ class Registration(Resource):
                 'message' : 'Invalid key field'
             }), 400)
      
-        new_user = user.add_user(email, password, username, firstname, lastname, phonenumber)
+        new_user = user.add_user(email,password,username,firstname,lastname,phonenumber)
         
         if not new_user:
             return make_response(jsonify({
@@ -49,13 +49,13 @@ class LogIn(Resource):
                 'message' : 'incorrect login credentials. please enter details again'
             }), 401)
         
-        user_id = queried_user[0]['id']
+        u_id = user_login[0]['user_id']
         valid_password = user.validate_password(password, email)
-        if not check_password:
+        if not valid_password:
             return make_response(jsonify({
                 'message' : 'incorrect login credentials. please enter details again'
             }), 401)
-        user_token = user.generate_token(user_id)
+        user_token = user.generate_token(u_id)
         
         if not user_token:
             return make_response(jsonify( {
@@ -63,7 +63,7 @@ class LogIn(Resource):
             }), 401)
         
         return make_response(jsonify({
-            'message' : 'Successfully logged in',
-            'data' : user_token.decode()
+            'message' : 'Successfully logged in'
         }), 200)
       
+
