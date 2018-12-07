@@ -7,7 +7,6 @@ from datetime import datetime
 incident = [] #Stores the reports
 
 class Reports():
-
    """
         Class contains some of the methods used on the Reports resource
    """
@@ -23,9 +22,6 @@ class Reports():
         self.status = status
         self.image = image
         self.video = video
-        self.comment = comment
-
-
     def serialize(self):
         return {
             "id": self.id,
@@ -36,7 +32,6 @@ class Reports():
             "status":self.status,
             "image":self.image,
             "video":self.video,
-            "comment":self.comment
             }
         
 
@@ -65,7 +60,6 @@ class db():
             "status":self.status,
             "image":self.image,
             "video":self.video,
-            "comment":self.comment
             }
    
         

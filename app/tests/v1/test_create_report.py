@@ -19,20 +19,26 @@ class TestReportCreation(unittest.TestCase):
             "username": "john",
             "flag": "redflag",
             "location": "PAC",
-            "statusmode": "resolved"
+            "status": "resolved",
+            "image": "image.png",
+            "video": "video.mkv"
         }
         self.data1 = {
             "username": "peter",
             "flag": "redflag",
             "location": "PAC",
-            "statusmode": "resolved"
+            "status": "resolved",
+            "image": "image.png",
+            "video": "video"
         } 
-        self.data2 = {
-            "username": "peter",
-            "flag": "redflag",
-            "location": "PAC",
-            "statusmode": "resolved"
-        }
+        # self.data2 = {
+        #     "username": "peter",
+        #     "flag": "redflag",
+        #     "location": "PAC",
+        #     "status": "resolved"
+        #     "image": "image.png",
+        #     "video": "video"
+        # }
     
     def test_POST_create_report(self):
         """
