@@ -1,32 +1,68 @@
 from flask_restful import Resource
 from flask import jsonify, make_response, request
-
-from .models import Reports, incident, db
+from .models import Reports, db, incident
+from app.utilities.validators import isValidUsername,isBlank,isImage,isVideo
 
 class ReportLists(Resource):
     
     def post(self):
-        data = request.get_json(force=True)
-        
+        data = request.get_json()
         createdBy = data['username']
-        type = data['flag']
+        flag = data['flag']
         location = data['location']
-        status = data['statusmode']
-       
-        new_report = Reports(createdBy, type, location, status)
-        incident.append(new_report)
+        status = data['status']
+        image = data['image']
+        video = data['video']
+        comment = ['comment']
+        
+        if not isValidUsername(createdBy):
+            return make_response(jsonify({
+                'message':'Username takes letters only'
+            }), 400)
 
+        if not isBlank(createdBy):
+            return make_response(jsonify({
+                'message':'Username cannot be empty'
+            }), 400)
+
+        if not isBlank(flag):
+            return make_response(jsonify({
+                'message':'type cannot be empty'
+            }), 400)
+
+        if not isBlank(location):
+            return make_response(jsonify({
+                'message':'location cannot be empty'
+            }),400)
+
+        if not isBlank(status):
+            return make_response(jsonify({
+                'message':'status cannot be empty'
+            }), 400)
+        if not isImage(image):
+            return make_response(jsonify({
+                'message':'wrong image format. Use jpg/png/gif'
+            }), 400)
+        if not isVideo(video):
+            return make_response(jsonify({
+                'message':'wrong video format. Use mp4/mkv/3gp'
+            }))
+
+        new_report = Reports(createdBy, flag, location, status, image, video, comment)
+        incident.append(new_report)
+        payload = new_report.serialize()
         return make_response(jsonify({
             "message": "Report has been created successfully",
-            "new report" : new_report.serialize()
+            "data" : payload
         }), 201)
 
     def get(self):
         return make_response(jsonify({
             "Message":"OK",
-            "Report": [get_report.serialize() for get_report in incident] 
+            "data": [get_report.serialize() for get_report in incident] 
         }), 200)
-        
+    
+
 class SingleReport(Resource,db):
     def __init__(self):
         self.mydb = db()
@@ -36,7 +72,7 @@ class SingleReport(Resource,db):
         if report:
             return make_response(jsonify({
                 "message":"OK",
-                "report": report.serialize()
+                "data": report.serialize()
             }), 200)
 
         else: 
@@ -57,7 +93,10 @@ class EditReport(Resource, db):
             report.createdBy = data['username']
             report.type = data['flag']
             report.location = data['location']
-            report.status = data['statusmode']
+            report.status = data['status']
+            report.image = data['image']
+            report.video = data['video']
+            report.comment = ['comment']
             return make_response(jsonify({
                 "message":"Report edited successfully",
                 "data": report.serialize()
