@@ -1,11 +1,14 @@
 from flask_restful import Resource
 from flask import jsonify, make_response, request
-from .models import Reports, db, incident
-from app.utilities.validators import isValidUsername,isBlank,isImage,isVideo
 
 class ReportLists(Resource):
-    
+    """
+        Class for creating a report and getting all the reports created
+    """
     def post(self):
+        """
+            POST method for creating a new report
+        """
         data = request.get_json()
         createdBy = data['username']
         flag = data['flag']
@@ -57,6 +60,9 @@ class ReportLists(Resource):
         }), 201)
 
     def get(self):
+        """
+            GET method for getting all the reports created
+        """
         return make_response(jsonify({
             "Message":"OK",
             "data": [get_report.serialize() for get_report in incident] 
@@ -64,10 +70,16 @@ class ReportLists(Resource):
     
 
 class SingleReport(Resource,db):
+    """
+        Class for retrieving one report 
+    """
     def __init__(self):
         self.mydb = db()
 
     def get(self,id):
+        """
+            GET method for retrieving a single report by its ID
+        """
         report = self.mydb.get_by_id(id)
         if report:
             return make_response(jsonify({
@@ -82,10 +94,16 @@ class SingleReport(Resource,db):
             return make_response(jsonify(response), 400)
 
 class EditReport(Resource, db):
+    """
+        Class for editing a report
+    """
     def __init__(self):
         self.mydb = db()
 
     def put(self, id):
+        """
+            PUT method for editing a single report
+        """
         report = self.mydb.get_by_id(id)
         
         if report:
@@ -107,10 +125,17 @@ class EditReport(Resource, db):
             }),400)
 
 class DeleteReport(Resource, db):
+    """
+        Class for deleting a report
+    """
     def __init__(self):
         self.mydb = db()
 
     def delete(self, id):
+        """
+            DELETE method for deleting a single report by its ID
+        """
+
             report = self.mydb.get_by_id(id)
             if report:
                 incident.remove(report)
