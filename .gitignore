@@ -102,3 +102,10 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.vscode/
+venv/
+.vscode/
+.pytest_cache/
+__pycache__/
+.coverage

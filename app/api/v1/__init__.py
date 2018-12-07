@@ -1,7 +1,7 @@
-from .views import ReportLists, SingleReport, EditReport, DeleteReport
-
 from flask import Blueprint
 from flask_restful import Api, Resource
+#local imports
+from .views import ReportLists, SingleReport, EditReport, DeleteReport
 
 version_one = Blueprint('api_v1', __name__, url_prefix='/api/v1')
 
