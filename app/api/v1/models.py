@@ -3,7 +3,7 @@ from datetime import datetime
 incident = []
 class Reports():
    
-    def __init__(self, username, flag, location, status, image, video, comment):
+    def __init__(self, username, flag, location, status, image, video):
         self.id = len(incident)+1
         self.createdOn = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.createdBy = username
@@ -12,8 +12,7 @@ class Reports():
         self.status = status
         self.image = image
         self.video = video
-        self.comment = comment
-
+        
     def serialize(self):
         return {
             "id": self.id,
@@ -24,7 +23,6 @@ class Reports():
             "status":self.status,
             "image":self.image,
             "video":self.video,
-            "comment":self.comment
             }
         
 
@@ -45,7 +43,6 @@ class db():
             "status":self.status,
             "image":self.image,
             "video":self.video,
-            "comment":self.comment
             }
    
         

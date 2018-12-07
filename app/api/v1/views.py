@@ -13,7 +13,7 @@ class ReportLists(Resource):
         status = data['status']
         image = data['image']
         video = data['video']
-        comment = ['comment']
+        #comment = ['comment']
         
         if not isValidUsername(createdBy):
             return make_response(jsonify({
@@ -48,7 +48,7 @@ class ReportLists(Resource):
                 'message':'wrong video format. Use mp4/mkv/3gp'
             }))
 
-        new_report = Reports(createdBy, flag, location, status, image, video, comment)
+        new_report = Reports(createdBy, flag, location, status, image, video)
         incident.append(new_report)
         payload = new_report.serialize()
         return make_response(jsonify({
