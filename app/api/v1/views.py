@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, make_response, request
-from .models import Reports, db
-from app.utilities.validators import isValidUsername,isBlank, isFlag
+from .models import Reports, db, incident
+from app.utilities.validators import isValidUsername,isBlank,isImage,isVideo
 
 class ReportLists(Resource):
     
@@ -11,6 +11,9 @@ class ReportLists(Resource):
         flag = data['flag']
         location = data['location']
         status = data['status']
+        image = data['image']
+        video = data['video']
+        comment = ['comment']
         
         if not isValidUsername(createdBy):
             return make_response(jsonify({
@@ -22,7 +25,7 @@ class ReportLists(Resource):
                 'message':'Username cannot be empty'
             }), 400)
 
-        if not isBlank(flag) and isFlag(flag):
+        if not isBlank(flag):
             return make_response(jsonify({
                 'message':'type cannot be empty'
             }), 400)
@@ -36,9 +39,18 @@ class ReportLists(Resource):
             return make_response(jsonify({
                 'message':'status cannot be empty'
             }), 400)
+        if not isImage(image):
+            return make_response(jsonify({
+                'message':'wrong image format. Use jpg/png/gif'
+            }), 400)
+        if not isVideo(video):
+            return make_response(jsonify({
+                'message':'wrong video format. Use mp4/mkv/3gp'
+            }))
 
-        new_report = Reports(createdBy, flag, location, status)
-        payload = new_report.add_to_db()
+        new_report = Reports(createdBy, flag, location, status, image, video, comment)
+        incident.append(new_report)
+        payload = new_report.serialize()
         return make_response(jsonify({
             "message": "Report has been created successfully",
             "data" : payload
@@ -81,7 +93,10 @@ class EditReport(Resource, db):
             report.createdBy = data['username']
             report.type = data['flag']
             report.location = data['location']
-            report.status = data['statusmode']
+            report.status = data['status']
+            report.image = data['image']
+            report.video = data['video']
+            report.comment = ['comment']
             return make_response(jsonify({
                 "message":"Report edited successfully",
                 "data": report.serialize()

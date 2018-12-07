@@ -32,8 +32,12 @@ def isNumber(number):
         return False
     return True
 
-def isFlag(check_str):
-    if re.search(r'\bredflag\b|\bintervention\b', check_str):
-        return False
-    return True
-        
+def isImage(img):
+    if re.match(r".*\.(jpg|png|gif)$", img):
+        return True
+    return False
+
+def isVideo(video):
+    if re.match(r".*\.(mp4|mkv|3gp)$", video):
+        return True
+    return False
