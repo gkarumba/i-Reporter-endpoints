@@ -7,10 +7,10 @@ from datetime import datetime
 incident = [] #Stores the reports
 
 class Reports():
-   """
+    """
         Class contains some of the methods used on the Reports resource
-   """
-    def __init__(self, username, flag, location, status, image, video, comment):
+    """
+    def __init__(self,username,flag,location,status,image,video):
         """
             Method for instatiating the arguments used by a report
         """
@@ -22,6 +22,7 @@ class Reports():
         self.status = status
         self.image = image
         self.video = video
+
     def serialize(self):
         return {
             "id": self.id,
