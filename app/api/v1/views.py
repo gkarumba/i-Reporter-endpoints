@@ -1,5 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, make_response, request
+from .models import Reports, incident,db
+from app.utilities.validators import isValidUsername,isBlank,isImage,isVideo
 
 class ReportLists(Resource):
     """
@@ -135,15 +137,14 @@ class DeleteReport(Resource, db):
         """
             DELETE method for deleting a single report by its ID
         """
-
-            report = self.mydb.get_by_id(id)
-            if report:
-                incident.remove(report)
-                return make_response(jsonify({
-            "message":"Report has been deleted successfully"
-        }), 200)
-            else:
-                return make_response(jsonify({
+        report = self.mydb.get_by_id(id)
+        if report:
+            incident.remove(report)
+            return make_response(jsonify({
+                "message":"Report has been deleted successfully"
+            }), 200)
+        else:
+            return make_response(jsonify({
                 "message":"ID invalid, no report found"
             }), 400)
 
