@@ -25,7 +25,7 @@ class ReportDB:
         report_id SERIAL PRIMARY KEY,
         createdOn timestamp default current_timestamp,
         createdby VARCHAR(50) NOT NULL,
-        type VARCHAR(24) NOT NULL,
+        flag VARCHAR(24) NOT NULL,
         location VARCHAR(30) NOT NULL,
         status VARCHAR (24) NOT NULL
         );""")
