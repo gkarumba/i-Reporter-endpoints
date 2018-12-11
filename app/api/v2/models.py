@@ -21,6 +21,13 @@ class ReportIncident:
 
         return payload
 
-        
+    def report_list(self):
+        """
+        Gets all the reports 
+        """
+        query = """SELECT username,flag_type,location,status,report_id FROM reports ORDER BY report_id ASC;"""
+        respo = ReportDB.get_all(query)
+        return respo
+
 
     

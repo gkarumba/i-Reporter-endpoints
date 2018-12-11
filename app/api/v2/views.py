@@ -11,7 +11,7 @@ class ReportList(Resource):
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
-                'message':'This is a Protected route. Please add a toekn to the header'
+                'message':'This is a Protected route. Please add a token to the header'
             }), 400)
         access_token = user_header.split(" ")[1]
         if not access_token:
@@ -63,3 +63,14 @@ class ReportList(Resource):
                 'message':'Incident Created Successfully'
                 'data': response
             }), 201)
+
+    def get(self):
+        resp = report.report_list()
+        if resp: 
+            return make_response(jsonify({
+                'message':'OK'
+                'data': resp
+            }), 200)
+        return make_response(jsonify({
+                'message':'No incident available'
+            }), 400)
