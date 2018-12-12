@@ -50,12 +50,10 @@ class ReportDB():
     def update_table_row(self, query_string):
         resp = self.cur.execute(query_string)
         self.conn.commit()
-        return resp
 
     def delete(self, query_string):
-        resp = self.cur.execut(query_string)
+        resp = self.cur.execute(query_string)
         self.conn.commit()
-        return resp
     
     def __del__(self):
         self.conn.close()

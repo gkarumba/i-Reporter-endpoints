@@ -17,7 +17,7 @@ def create_app(config_name="development_config"):
     app = Flask(__name__,instance_relative_config = True)
     app.config.from_object(CONFIGS[config_name])
     # ReportDB(app.config['DATABASE_URI'])
-    db.create_tables()
+    #db.create_tables()
     app.register_blueprint(v1)
     app.register_blueprint(user)
     app.register_blueprint(users2)

@@ -50,7 +50,15 @@ class ReportIncident:
         respo = db.get_one(load_query)
         if not respo:
             return False
-        update_query = """UPDATE reports SET location='{}' status='{}' comments='{}' WHERE report_id={}""".format(new_location,new_status,new_comments, report_id)
+        update_query = """UPDATE reports SET location='{}', status='{}', comments='{}' WHERE report_id={}""".format(new_location,new_status,new_comments, report_id)
+        db.update_table_row(update_query)
+        retrieve_query = """SELECT * FROM reports WHERE report_id={}""".format(report_id)
+        response = db.get_one(retrieve_query)
+        return response
 
-    def delete(self):
+    def delete_incident(self,report_id):
         load_query = """DELETE FROM reports WHERE report_id={}""".format(report_id)
+        response = db.delete(load_query)
+        retrieve_query = """SELECT * FROM reports WHERE report_id={}""".format(report_id)
+        response = db.get_one(retrieve_query)
+        return response

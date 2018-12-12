@@ -67,6 +67,24 @@ class ReportList(Resource):
             }), 201)
 
     def get(self):
+        user_header = request.headers.get('Authorization')
+        if not user_header:
+            return make_response(jsonify({
+                'message':'This is a Protected route. Please add a token to the header'
+            }), 400)
+        access_token = user_header.split(" ")[1]
+        if not access_token:
+            return make_response(jsonify({
+                'message':'No token. Please put token in the Header'
+            }), 400)
+        
+        user_id = decode_token(access_token)
+
+        if isinstance(user_id, str):
+            return make_response(jsonify({
+                'message':'Invalid Token'
+            }), 400)
+
         resp = report.incident_list()
         if resp: 
             return make_response(jsonify({
@@ -126,3 +144,32 @@ class EditReport(Resource):
                 'message':'New Incident failed to update. Invalid ID'
             }), 400)
 
+class DeleteReport(Resource):
+    def delete(self,id):
+        user_header = request.headers.get('Authorization')
+        if not user_header:
+            return make_response(jsonify({
+                'message':'This is a Protected route. Please add a token to the header'
+            }), 400)
+        access_token = user_header.split(" ")[1]
+        if not access_token:
+            return make_response(jsonify({
+                'message':'No token. Please put token in the Header'
+            }), 400)
+
+        user_id = decode_token(access_token)
+
+        if isinstance(user_id, str):
+            return make_response(jsonify({
+                'message':'Invalid Token'
+            }), 400)
+
+        del_report = report.delete_incident(id)
+        if not del_report:
+            return make_response(jsonify({
+                'message':'Report has been deleted successfully'
+            }), 200)
+        else:
+            return make_response(jsonify({
+                'message':'ID invalid, no report found'
+            }), 400)
