@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint
 #local imports
-from instance.config import CONFIGS
+from app import config
 from app.users.v1 import user
 from app.api.v1 import version_one as v1
 from app.users.v1 import user
@@ -14,10 +14,11 @@ def create_app(config_name="development_config"):
     """
     Initialize flask app instance and configure it
     """
-    app = Flask(__name__,instance_relative_config = True)
-    app.config.from_object(CONFIGS[config_name])
-    # ReportDB(app.config['DATABASE_URI'])
-    #db.create_tables()
+
+    app = Flask(__name__,instance_relative_config=True)
+    app.config.from_object(config.CONFIGS[config_name])
+    db.start_db(app.config['DATABASE_URI'])
+    db.create_tables()
     app.register_blueprint(v1)
     app.register_blueprint(user)
     app.register_blueprint(users2)
