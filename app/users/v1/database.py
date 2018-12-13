@@ -22,11 +22,11 @@ class ReportDB():
         );
         CREATE TABLE reports(
         report_id SERIAL PRIMARY KEY,
-        username VARCHAR(50) NOT NULL,
+        createdBy INT NOT NULL REFERENCES users(user_id),
         flag_type VARCHAR(24) NOT NULL,
         location VARCHAR(30) NOT NULL,
         status VARCHAR (24) NOT NULL,
-        comments VARCHAR (500) NOT NULL, 
+        comments VARCHAR (500) NOT NULL
         );""")
         cls.conn.commit()
 

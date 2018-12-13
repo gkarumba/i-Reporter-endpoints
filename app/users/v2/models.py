@@ -18,7 +18,7 @@ class User():
 
         if retrieved_username or retrieved_email:
             return False
-        user_query = """INSERT INTO users (email,password,username,firstname,lastname,phonenumber) VALUES (%s,%s,%s,%s,%s,%s) RETURNING username"""
+        user_query = """INSERT INTO users (email,password,username,firstname,lastname,phonenumber) VALUES (%s,%s,%s,%s,%s,%s) RETURNING user_id"""
         tupl = (email,hash_password,username,firstname,lastname,phonenumber)
         repo = db.add_to_db(user_query,tupl)
         payload = repo

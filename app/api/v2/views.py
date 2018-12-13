@@ -28,7 +28,7 @@ class ReportList(Resource):
 
         try: 
             data = request.get_json()
-            username = data['username']
+            createdBy = data['createdBy']
             flag_type = data['flag_type']
             location = data['location']
             status = data['status']
@@ -38,10 +38,10 @@ class ReportList(Resource):
                 'message':'Invalid key field'
             }), 400)
 
-        if not isBlank(username) and not isValidUsername(username):
+        if not isBlank(createdBy):
             return make_response(jsonify({
-                'message':'Username cannot be empty and takes letters only'
-                }),400)
+                'message':'createdBy cannot be empty and takes numbers only'
+            }), 400)
         if not isBlank(flag_type):
             return  make_response(jsonify({
                 'message':'Flag_type cannot be blank'
@@ -59,7 +59,7 @@ class ReportList(Resource):
                 'message':'Comments cannot be blank'
             }), 400)
 
-        response = report.create_incident(username,flag_type,location,status,comments)
+        response = report.create_incident(createdBy,flag_type,location,status,comments)
 
         return make_response(jsonify({
                 'message':'Incident Created Successfully',
