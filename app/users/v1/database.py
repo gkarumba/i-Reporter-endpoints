@@ -4,13 +4,14 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 
 class ReportDB():
-    def __init__(self):
-        conn_string = "host='localhost' dbname='test_reporter' user='karumba' password='123456'"
-        self.conn = psycopg2.connect(conn_string)
-        self.cur = self.conn.cursor(cursor_factory=RealDictCursor)
-
-    def create_tables(self): 
-        self.cur.execute(""" CREATE TABLE users(
+    @classmethod
+    def start_db(cls,URI):
+        cls.conn = psycopg2.connect(URI)
+        cls.cur = cls.conn.cursor(cursor_factory=RealDictCursor)
+    
+    @classmethod
+    def create_tables(cls): 
+        cls.cur.execute(""" CREATE TABLE users(
         user_id SERIAL PRIMARY KEY,
         username VARCHAR(50) NOT NULL UNIQUE,
         email VARCHAR(50) NOT NULL UNIQUE,
@@ -27,42 +28,50 @@ class ReportDB():
         status VARCHAR (24) NOT NULL,
         comments VARCHAR (500) NOT NULL, 
         );""")
-        self.conn.commit()
+        cls.conn.commit()
 
-    def save_to_db(self,query_string, tuple_data):
-        self.cur.execute(query_string, tuple_data)
-        self.conn.commit()
+    @classmethod
+    def save_to_db(cls,query_string, tuple_data):
+        cls.cur.execute(query_string, tuple_data)
+        cls.conn.commit()
 
-    def add_to_db(self, query_string, tuple_data):
-        self.cur.execute(query_string, tuple_data)
-        self.conn.commit()
-        response = self.cur.fetchone()
+    @classmethod
+    def add_to_db(cls, query_string, tuple_data):
+        cls.cur.execute(query_string, tuple_data)
+        cls.conn.commit()
+        response = cls.cur.fetchone()
         return response
 
-    def get_one(self,query_string):
-        self.cur.execute(query_string)
-        return self.cur.fetchone()
+    @classmethod
+    def get_one(cls,query_string):
+        cls.cur.execute(query_string)
+        return cls.cur.fetchone()
 
-    def get_all(self,query_string):
-        self.cur.execute(query_string)
-        return self.cur.fetchall()
-  
-    def update_table_row(self, query_string):
-        resp = self.cur.execute(query_string)
-        self.conn.commit()
-
-    def delete(self, query_string):
-        resp = self.cur.execute(query_string)
-        self.conn.commit()
+    @classmethod
+    def get_all(cls,query_string):
+        cls.cur.execute(query_string)
+        return cls.cur.fetchall()
     
-    def __del__(self):
-        self.conn.close()
+    @classmethod
+    def update_table_row(cls, query_string):
+        resp = cls.cur.execute(query_string)
+        cls.conn.commit()
     
-    def drop_table(self):
-        self.cur.execute("""
+    @classmethod
+    def delete(cls, query_string):
+        resp = cls.cur.execute(query_string)
+        cls.conn.commit()
+    
+    @classmethod
+    def __del__(cls):
+        cls.conn.close()
+    
+    @classmethod
+    def drop_table(cls):
+        cls.cur.execute("""
             DROP TABLE IF EXISTS users CASCADE;\
             DROP TABLE IF EXISTS reports CASCADE;""")
-        self.conn.commit()
+        cls.conn.commit()
 
 
 
