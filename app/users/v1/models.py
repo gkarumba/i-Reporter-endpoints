@@ -49,7 +49,7 @@ class User(Parent):
     def generate_user_token(self, userID):  
         try:
             payload = {
-                'exp': datetime.utcnow()+timedelta(minutes=10),
+                'exp': datetime.utcnow()+timedelta(minutes=60),
                 'iat' :datetime.utcnow(),
                 'id': userID
             }

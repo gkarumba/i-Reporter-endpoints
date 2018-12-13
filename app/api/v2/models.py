@@ -7,7 +7,7 @@ class ReportIncident:
     """
       Class contains some of the methods used on reports table in the db
     """
-    # def __init__(self,createdOn,username,flag_type,location,status,comments):
+    # def __init__(self,createdOn,createdBy,flag_type,location,status,comments):
     #     self.createdOn = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     #     self.username = username
     #     self.flag_type = flag_type
@@ -15,19 +15,19 @@ class ReportIncident:
     #     self.status = status
     #     self.comments = comments
 
-    def create_incident(self,username,flag_type,location,status,comments):
+    def create_incident(self,createdBy,flag_type,location,status,comments):
         """
         Method for generating new input to the reports list
         """
         payload ={
-            "username": username,
+            "createdBy" : createdBy,
             "flag_type": flag_type,
             "location":location,
             "status":status,
             "comments":comments
         }
-        load_query = """INSERT INTO reports (username,flag_type,location,status,comments) VALUES(%s,%s,%s,%s,%s);"""
-        tupl = (username,flag_type,location,status,comments)
+        load_query = """INSERT INTO reports (createdBy,flag_type,location,status,comments) VALUES(%s,%s,%s,%s,%s);"""
+        tupl = (createdBy,flag_type,location,status,comments)
         db.save_to_db(load_query,tupl)
 
         return payload
@@ -36,12 +36,12 @@ class ReportIncident:
         """
         Gets all the reports 
         """
-        query = """SELECT username,flag_type,location,status,comments,report_id FROM reports ORDER BY report_id ASC;"""
+        query = """SELECT createdBy,flag_type,location,status,comments,report_id FROM reports ORDER BY report_id ASC;"""
         respo = db.get_all(query)
         return respo
 
     def get_one_incident(self, report_id):
-        load_query = """SELECT username,flag_type,location,status,comments,report_id FROM reports WHERE report_id={}""".format(report_id)
+        load_query = """SELECT createdBy,flag_type,location,status,comments,report_id FROM reports WHERE report_id={}""".format(report_id)
         respo = db.get_one(load_query)
         if not respo:
             return False
