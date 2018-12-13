@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restful import Api
 
-from app.users.v2.views import Registration, LogIn
+from app.api.users.v2.views import Registration, LogIn
 
 users2 = Blueprint('users2', __name__, url_prefix="/users/v2")
 

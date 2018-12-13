@@ -15,7 +15,7 @@ class DevelopmentConfig(DevConfig):
 
 class TestingConfig(DevConfig):
     """Configuration for Testing"""
-    TEST=True
+    TEST = True
     DEBUG = True
     DATABASE_URI = os.getenv("TEST_DATABASE_URL")
 
@@ -24,7 +24,7 @@ class ProductionConfig(DevConfig):
     DEBUG = True
     TESTING = False 
 
-CONFIGS ={
+CONFIGS = {
     'development_config': DevelopmentConfig,
     'testing_config': TestingConfig
 }

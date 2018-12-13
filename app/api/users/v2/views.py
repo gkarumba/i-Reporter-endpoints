@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import make_response,jsonify, request
-from app.users.v2.models import User
+from app.api.users.v2.models import User
 from app.utilities.validators import isBlank,isNumber,isValidEmail,isValidPassword,isValidSpace,isValidUsername
 
 user = User()
