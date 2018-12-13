@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import make_response, jsonify, request
 from app.utilities.validators import isValidUsername,isBlank
-from app.api.v2.models import ReportIncident
+from app.api.incidents.v2.models import ReportIncident
 from app.utilities.tokens import decode_token
 
 report = ReportIncident()

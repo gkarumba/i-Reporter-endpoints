@@ -2,7 +2,7 @@ import unittest
 import json
 
 from app import create_app
-from app.users.v1.database import ReportDB as db
+from app.api.users.v1.database import ReportDB as db
 
 class RegistrationTestCase(unittest.TestCase):
 

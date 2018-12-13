@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import make_response,jsonify, request
-from app.users.v1.models import User
+from app.api.users.v1.models import User
 from app.utilities.validators import isValidEmail,isValidPassword,isValidUsername,isValidSpace,isBlank,isNumber
 
 class Registration(Resource):

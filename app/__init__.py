@@ -1,12 +1,11 @@
 from flask import Flask, Blueprint
 #local imports
-from app import config
-from app.users.v1 import user
-from app.api.v1 import version_one as v1
-from app.users.v1 import user
-from app.users.v2 import users2
-from app.api.v2 import version_two as v2
-from app.users.v1.database import ReportDB 
+from instance import config
+# from app.api.incidents.v1 import version_one as v1
+from app.api.users.v1 import user
+from app.api.users.v2 import users2
+from app.api.incidents.v2 import version_two as v2
+from app.api.users.v1.database import ReportDB 
 
 db = ReportDB()
 

@@ -2,7 +2,7 @@ import json
 import unittest
 
 from app import create_app
-from app.users.v1.database import ReportDB
+from app.api.users.v1.database import ReportDB
 
 db = ReportDB()
 
