@@ -95,6 +95,37 @@ class ReportList(Resource):
                 'message':'No incident available'
             }), 400)
 
+class GetSingleReport(Resource):
+    def get(self,id):
+        user_header = request.headers.get('Authorization')
+        if not user_header:
+            return make_response(jsonify({
+                'message':'This is a Protected route. Please add a token to the header'
+            }), 400)
+        access_token = user_header.split(" ")[1]
+        if not access_token:
+            return make_response(jsonify({
+                'message':'No token. Please put token in the Header'
+            }), 400)
+        
+        user_id = decode_token(access_token)
+
+        if isinstance(user_id, str):
+            return make_response(jsonify({
+                'message':'Invalid Token'
+            }), 400)
+
+        response  = report.get_one_incident(id)
+        if response:
+            return make_response(jsonify({
+                'message':'OK',
+                'data': response
+            }), 200)
+        return make_response(jsonify({
+            'message':'No incident by that ID'
+        }), 400)
+        
+    
 class EditReport(Resource):
     def put(self, id):
         user_header = request.headers.get('Authorization')
