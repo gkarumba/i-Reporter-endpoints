@@ -40,6 +40,13 @@ class ReportIncident:
         respo = db.get_all(query)
         return respo
 
+    def get_one_incident(self, report_id):
+        load_query = """SELECT username,flag_type,location,status,comments,report_id FROM reports WHERE report_id={}""".format(report_id)
+        respo = db.get_one(load_query)
+        if not respo:
+            return False
+        return respo
+        
     def update_incident(self,new_location,new_status,new_comments,report_id):
         payload = {
             'updated_location': new_location,
