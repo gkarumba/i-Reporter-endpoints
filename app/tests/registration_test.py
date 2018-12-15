@@ -29,23 +29,26 @@ class RegistrationTestCase(unittest.TestCase):
             'phonenumber' : '0728556699'
         }
 
-    def tearDown(self):
-        db.drop_table()
-
     def test_registration(self):
-        response = self.app.post('users/v2/registration',data=json.dumps(self.data),content_type='application/json')
+        response = self.app.post('/users/v2/registration',data=json.dumps(self.data),content_type='application/json')
         result = json.loads(response.data)
+        # import pdb; pdb.set_trace() 
         self.assertEqual(response.status_code, 201)
         self.assertIn('Your account has successfully been registered',str(result))
 
     def test_already_registered(self):
-        response = self.app.post('users/v2/registration',data=json.dumps(self.data),content_type='application/json')
+        response = self.app.post('/users/v2/registration',data=json.dumps(self.data),content_type='application/json')
         result = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
-        response1 = self.app.post('users/v2/registration',data=json.dumps(self.data2),content_type='application/json')
+        # import pdb; pdb.set_trace()
+        response1 = self.app.post('/users/v2/registration',data=json.dumps(self.data),content_type='application/json')
         result1 = json.loads(response1.data)
+        #import pdb; pdb.set_trace()
         self.assertEqual(response1.status_code, 409)
-        self.assertIn('email already exists. Use a different email',str(result))
+        self.assertIn(result1['message'],'email already exists. Use a different email')
     
+    def tearDown(self):
+        db.drop_table()
+
 if __name__ == '__main__':
     unittest.main()

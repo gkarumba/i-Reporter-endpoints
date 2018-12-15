@@ -28,3 +28,5 @@ CONFIGS = {
     'development_config': DevelopmentConfig,
     'testing_config': TestingConfig
 }
+
+
