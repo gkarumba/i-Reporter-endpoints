@@ -2,6 +2,9 @@ import os
 import jwt
 
 def decode_token(token):
+    """
+        Method for decoding the token
+    """
     try:
         payload = jwt.decode(token, os.environ.get('SECRET_KEY'))
         return payload['id']

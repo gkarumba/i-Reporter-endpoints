@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import make_response, jsonify, request
+#local imports
 from app.utilities.validators import is_valid_username,is_blank,is_status,is_location,is_flag
 from app.api.incidents.v2.models import ReportIncident
 from app.utilities.tokens import decode_token
@@ -7,8 +8,14 @@ from app.utilities.tokens import decode_token
 report = ReportIncident()
         
 class ReportList(Resource):
+    """
+        Class for POST and GET all methods
+    """
     
     def post(self):
+    """
+        Method for posting a new report
+    """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -68,6 +75,9 @@ class ReportList(Resource):
         }), 400)
 
     def get(self):
+    """
+        Method for retrieving all reports 
+    """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -102,7 +112,14 @@ class ReportList(Resource):
         # }),400)
 
 class GetSingleReport(Resource):
+    """
+        Class for the get single report method
+    """
+    
     def get(self,id):
+    """
+        Method for retrieving a report created by the logged in user
+    """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -137,7 +154,13 @@ class GetSingleReport(Resource):
         }),400)
     
 class EditLocation(Resource):
+    """
+        Class for the method of patching the location
+    """
     def patch(self,id):
+    """
+        Method for patching the location
+    """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -189,7 +212,13 @@ class EditLocation(Resource):
         }),400)
 
 class EditComment(Resource):
+    """
+        Class for the method of patching the comments
+    """
     def patch(self,id):
+    """
+        Method for patching the comments
+    """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -241,7 +270,13 @@ class EditComment(Resource):
         }),400)     
            
 class Editflag(Resource):
+    """
+        Class for the method of patching the flag_type
+    """
     def patch(self,id):
+    """
+        Method for patching the flag_type
+    """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -293,7 +328,13 @@ class Editflag(Resource):
 
 
 class DeleteReport(Resource):
+    """
+        Class for the method of deleting a specific report
+    """
     def delete(self,id):
+    """
+        Method of deleting a specific report
+    """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -332,7 +373,13 @@ class DeleteReport(Resource):
         }),400)
             
 class EditStatus(Resource):
+    """
+        Class for the method of patching the status
+    """
     def patch(self,id):
+    """
+        Method of patching the status
+    """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({

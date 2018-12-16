@@ -1,12 +1,17 @@
 import unittest
 import json
-
+#local imports 
 from app import create_app
 from app.database.database import ReportDB as db
 
 class RegistrationTestCase(unittest.TestCase):
-
+    """
+        Class for the methods used in testing
+    """
     def setUp(self):
+    """
+        Method for setting up the tests
+    """
         self.test_app = create_app(config_name='testing_config')
         self.app = self.test_app.test_client()
         self.test_app.testing = True
@@ -30,6 +35,9 @@ class RegistrationTestCase(unittest.TestCase):
         }
 
     def test_registration(self):
+    """
+        Method for testing registration of a new user
+    """
         response = self.app.post('/users/v2/registration',data=json.dumps(self.data),content_type='application/json')
         result = json.loads(response.data)
         # import pdb; pdb.set_trace() 
@@ -37,6 +45,9 @@ class RegistrationTestCase(unittest.TestCase):
         self.assertIn('Your account has successfully been registered',str(result))
 
     def test_already_registered(self):
+    """
+        Method for testing an already registered user
+    """
         response = self.app.post('/users/v2/registration',data=json.dumps(self.data),content_type='application/json')
         result = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
@@ -48,6 +59,9 @@ class RegistrationTestCase(unittest.TestCase):
         self.assertIn(result1['message'],'email already exists. Use a different email')
     
     def tearDown(self):
+    """
+        Method for destroying the tables after running the tests
+    """
         db.drop_table()
 
 if __name__ == '__main__':
