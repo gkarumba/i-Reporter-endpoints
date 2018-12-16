@@ -1,6 +1,7 @@
 import re
+import json
 
-def isValidEmail(email):
+def is_valid_email(email):
     """
         Validates the email format
     """
@@ -9,7 +10,7 @@ def isValidEmail(email):
             return True
         return False
 
-def isValidUsername(u_name):
+def is_valid_username(u_name):
     """
         Validates the name format 
     """
@@ -17,7 +18,7 @@ def isValidUsername(u_name):
         return False
     return True
 
-def isValidPassword(password):
+def is_valid_password(password):
     """
         Validates the password format
     """
@@ -26,7 +27,7 @@ def isValidPassword(password):
     else:
         return False
 
-def isValidSpace(input_data):
+def is_valid_space(input_data):
     """
         Checks for whitespaces
     """
@@ -34,7 +35,7 @@ def isValidSpace(input_data):
         return False
     return True
     
-def isBlank(input_data):
+def is_blank(input_data):
     """
         Checks for blank inputs
     """
@@ -42,7 +43,7 @@ def isBlank(input_data):
         return True
     return False
 
-def isNumber(number):
+def is_number(number):
     """
         Checks if input is integers
     """
@@ -50,7 +51,7 @@ def isNumber(number):
         return False
     return True
 
-def isFlag(check_str):
+def is_flag(check_str):
     """
         Checks the flag type
     """
@@ -58,12 +59,37 @@ def isFlag(check_str):
         return False
     return True
 
-def isImage(img):
+def is_status(check_stt):
+    """
+        Checks if the status is the correct format
+    """
+    status_list = ['rejected','resolved','under investigation']
+    if check_stt in status_list:
+        return True
+    return False
+    
+def is_location(location):
+    """ 
+        Checks if the location is in the format long/lat
+    """
+    coords = []
+    loc = json.dumps(location)
+    # locat = json.loads(loc)
+    check_loc = re.split(',|"',loc)
+    coords.append(check_loc)
+    print(coords)
+    check_long = re.search("^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$", coords[0][1])
+    check_lat = re.search("^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$", coords[0][1])
+    if check_lat:
+        return True
+    return False
+
+def is_image(img):
     if re.match(r".*\.(jpg|png|gif)$", img):
         return True
     return False
 
-def isVideo(video):
+def is_video(video):
     if re.match(r".*\.(mp4|mkv|3gp)$", video):
         return True
     return False

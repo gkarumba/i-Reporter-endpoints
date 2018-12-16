@@ -1,5 +1,5 @@
 from datetime import datetime
-from app.api.users.v1.database import ReportDB
+from app.database.database import ReportDB
 
 db = ReportDB() 
 
