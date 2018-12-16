@@ -5,12 +5,18 @@
 This repo is a build of the API endpoints for an online reporting platform
 
 ## RESTful API Endpoints for ireporter
+
 | Method        |       Endpoint                     |         Description               |    Example        |
 | ------------- |       -------------                |         -------------             |  ------------     |
 | `POST`        | `/api/v2/reports`                  |   Creates a new report            |    `POST`         |
-| `GET`         | `/api/v2/reports`                  |   Gets all reports                |    payload = {    || `GET`         | `/api/v2/reports/<reportid>`       |   Gets a single report by id      |   `"flag":"",`    || `PUT`         | `/api/v1/reports/<reportid>/edit`  |   Edit a specific report by id    |   `"location":""` || `DELETE`      | `/api/v2/reports/<reportid>`       |   Deletes a specific report by id |   `"comment":""`} || `PATCH`       | `api/v2/reports/status/<reportid>` |   Edits the status                |                   |
+| `GET`         | `/api/v2/reports`                  |   Gets all reports                |    payload = {    |
+| `GET`         | `/api/v2/reports/<reportid>`       |   Gets a single report by id      |   `"flag":"",`    |
+| `PUT`         | `/api/v1/reports/<reportid>/edit`  |   Edit a specific report by id    |   `"location":""` |
+| `DELETE`      | `/api/v2/reports/<reportid>`       |   Deletes a specific report by id |   `"comment":""`} |
+| `PATCH`       | `api/v2/reports/status/<reportid>` |   Edits the status                |                   |
 | `PATCH`       |`api/v2/reports/location/<reportid>`|   Edits the location              |                   |
 | `PATCH`       | `api/v2/reports/comment/<reportid>`|   Edits the comment               |                   |
+
 
                                                                                     
 
