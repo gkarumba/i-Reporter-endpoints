@@ -90,6 +90,7 @@ class LogIn(Resource):
         
         return make_response(jsonify({
             'message' : 'Successfully logged in',
+            'user_id' : login_id,
             'token' : user_token
         }), 200)
       

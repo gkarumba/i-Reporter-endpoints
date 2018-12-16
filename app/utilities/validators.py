@@ -51,13 +51,14 @@ def is_number(number):
         return False
     return True
 
-def is_flag(check_str):
+def is_flag(check_flag):
     """
         Checks the flag type
     """
-    if re.search(r'\bredflag\b|\bintervention\b', check_str):
-        return False
-    return True
+    flag_list = ['redflag','intervention']
+    if check_flag in flag_list:
+        return True
+    return False
 
 def is_status(check_stt):
     """
@@ -77,7 +78,7 @@ def is_location(location):
     # locat = json.loads(loc)
     check_loc = re.split(',|"',loc)
     coords.append(check_loc)
-    print(coords)
+    # print(coords)
     check_long = re.search("^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$", coords[0][1])
     check_lat = re.search("^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$", coords[0][1])
     if check_lat:
