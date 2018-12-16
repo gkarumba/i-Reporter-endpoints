@@ -47,7 +47,7 @@ class ReportList(Resource):
             }), 400)
         
         user_id = decode_token(access_token)
-
+        # print(user_id)
         if isinstance(user_id, str):
             return make_response(jsonify({
                 'message':'Invalid Token'
@@ -56,7 +56,7 @@ class ReportList(Resource):
         # if self.token.validate_token():
         try: 
             data = request.get_json()
-            createdBy = data['createdBy']
+            # createdBy = data['createdBy']
             flag_type = data['flag_type']
             location = data['location']
             comments = data['comments']
@@ -65,10 +65,10 @@ class ReportList(Resource):
                 'message':'Invalid key field'
             }), 400)
 
-        if not isBlank(createdBy):
-            return make_response(jsonify({
-                'message':'createdBy cannot be empty and takes numbers only'
-            }), 400)
+        # if not isBlank(createdBy):
+        #     return make_response(jsonify({
+        #         'message':'createdBy cannot be empty and takes numbers only'
+        #     }), 400)
         if not isBlank(flag_type):
             return  make_response(jsonify({
                 'message':'Flag_type cannot be blank'
@@ -85,13 +85,21 @@ class ReportList(Resource):
             return make_response(jsonify({
                 'message':'Comments cannot be blank'
             }), 400)
-
-        response = report.create_incident(createdBy,flag_type,location,comments)
-
+        # check_user = report.check_if_admin()
+        # print(check_user)
+        if user_id != 1:
+            createdBy = user_id
+            response = report.create_incident(createdBy,flag_type,location,comments)
+            report_id = report.get_report_id()
+            return make_response(jsonify({
+                    'message':'Incident Created Successfully',
+                    'CreatedBy': createdBy,
+                    'report_id' : report_id['report_id']
+                }), 201)
         return make_response(jsonify({
-                'message':'Incident Created Successfully',
-                'data': response
-            }), 201)
+            'message':'Admin cannot post',
+        }), 400)
+
     # return make_response(jsonify({
     #     'message':'Incident Created Successfully',
     # }), 400)
@@ -114,7 +122,7 @@ class ReportList(Resource):
             return make_response(jsonify({
                 'message':'Invalid Token'
             }), 400)
-
+        
         resp = report.incident_list()
         if resp: 
             return make_response(jsonify({
@@ -156,65 +164,8 @@ class GetSingleReport(Resource):
         }), 400)
         
     
-class EditReport(Resource):
-    # def patch(self,id, item):
-    #     user_header = request.headers.get('Authorization')
-    #     if not user_header:
-    #         return make_response(jsonify({
-    #             'message':'This is a Protected route. Please add a token to the header'
-    #         }), 400)
-    #     access_token = user_header.split(" ")[1]
-    #     if not access_token:
-    #         return make_response(jsonify({
-    #             'message':'No token. Please put token in the Header'
-    #         }), 400)
-
-    #     user_id = decode_token(access_token)
-
-    #     if isinstance(user_id, str):
-    #         return make_response(jsonify({
-    #             'message':'Invalid Token'
-    #         }), 400)
-
-    #     new_incident_list = ['new_comments','new_location']
-    #     data = request.get_json()
-    #     if item in new_incident_list and item in data:
-    #         if item == 'new_comments' or item == 'new_location':
-    #             updated_location = data['new_location']
-    #             updated_comments = data['new_comments']
-
-    #             if not isBlank(updated_location):
-    #                 return  make_response(jsonify({
-    #                     'message':'New_Location cannot be blank'
-    #                 }), 400)
-    #             if not isBlank(updated_comments):
-    #                 return make_response(jsonify({
-    #                     'message':'New_Comments cannot be blank'
-    #                 }), 400)
-
-    #             new_report = report.update_incident(updated_location,updated_comments,id)
-    #             if new_report:
-    #                 return make_response(jsonify({
-    #                     'message':'New Incident Updated',
-    #                     'data': new_report
-    #                 }), 201)
-    #             else:
-    #                 return make_response(jsonify({
-    #                     'message':'New Incident failed to update. Invalid ID'
-    #                 }), 400)
-    #         return make_response(jsonify({
-    #                     'message':'You are only allowed to update location or comment'
-    #                 }), 400)
-    #     return make_response(jsonify({
-    #                     'message':'please provide location or comment'
-    #                 }), 400)
-
-                
-                
-
-                
-        
-    def put(self, id):
+class EditLocation(Resource):
+    def patch(self,id):
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -232,30 +183,111 @@ class EditReport(Resource):
             return make_response(jsonify({
                 'message':'Invalid Token'
             }), 400)
-
-        new_incident = request.get_json()
-        updated_location = new_incident['new_location']
-        updated_comments = new_incident['new_comments']
-
+        try:
+            data = request.get_json()
+            updated_location = data['new_location']
+        except Exception:
+            return make_response(jsonify({
+                'message':'Invalid Key Field'
+            }), 400)
         if not isBlank(updated_location):
-            return  make_response(jsonify({
-                'message':'New_Location cannot be blank'
-            }), 400)
-        if not isBlank(updated_comments):
             return make_response(jsonify({
-                'message':'New_Comments cannot be blank'
+                'message':'Empty not allowed'
+            }), 400)
+        # check_user = report.check_if_admin()
+        if user_id != 1:
+            new_report = report.update_location(updated_location,id)
+            return make_response(jsonify({
+                    'message':'Report has been edited successfully',
+                    'report': new_report
+                }), 200)
+        return make_response(jsonify({
+            'message':'Admin can only edit the status'
+        }),400)
+
+class EditComment(Resource):
+    def patch(self,id):
+        user_header = request.headers.get('Authorization')
+        if not user_header:
+            return make_response(jsonify({
+                'message':'This is a Protected route. Please add a token to the header'
+            }), 400)
+        access_token = user_header.split(" ")[1]
+        if not access_token:
+            return make_response(jsonify({
+                'message':'No token. Please put token in the Header'
             }), 400)
 
-        new_report = report.update_incident(updated_location,updated_comments,id)
-        if new_report:
+        user_id = decode_token(access_token)
+
+        if isinstance(user_id, str):
             return make_response(jsonify({
-                'message':'New Incident Updated',
-                'data': new_report
-            }), 201)
-        else:
-            return make_response(jsonify({
-                'message':'New Incident failed to update. Invalid ID'
+                'message':'Invalid Token'
             }), 400)
+        try:
+            data = request.get_json()
+            updated_comment = data['new_comment']
+        except Exception:
+            return make_response(jsonify({
+                'message':'Invalid Key Field'
+            }), 400)
+        
+        if not isBlank(updated_comment):
+            return make_response(jsonify({
+                'message':'Empty not allowed'
+            }), 400)
+        # check_user = report.check_if_admin()
+        if user_id != 1:
+            new_report = report.update_comment(updated_comment,id)
+            return make_response(jsonify({
+                    'message':'Report has been edited successfully',
+                    'report': new_report
+                }), 200) 
+        return make_response(jsonify({
+            'message':'Admin can only edit the status'
+        }),400)     
+           
+class Editflag(Resource):
+    def patch(self,id):
+        user_header = request.headers.get('Authorization')
+        if not user_header:
+            return make_response(jsonify({
+                'message':'This is a Protected route. Please add a token to the header'
+            }), 400)
+        access_token = user_header.split(" ")[1]
+        if not access_token:
+            return make_response(jsonify({
+                'message':'No token. Please put token in the Header'
+            }), 400)
+
+        user_id = decode_token(access_token)
+
+        if isinstance(user_id, str):
+            return make_response(jsonify({
+                'message':'Invalid Token'
+            }), 400)
+        try:
+            data = request.get_json()
+            updated_flag = data['new_flag']
+        except Exception:
+            return make_response(jsonify({
+                'message':'Invalid Key Field'
+            }), 400)
+        if not isBlank(updated_flag):
+            return make_response(jsonify({
+                'message':'Empty not allowed'
+            }), 400)
+        check_user = report.check_if_admin()
+        if user_id != 1:
+            new_report = report.update_flag(updated_flag,id)
+            return make_response(jsonify({
+                    'message':'Report has been edited successfully',
+                    'report': new_report
+                }), 200)
+        return make_response(jsonify({
+            'message':'Admin can only edit the status'
+        }),400)
+
 
 class DeleteReport(Resource):
     def delete(self,id):
@@ -276,13 +308,58 @@ class DeleteReport(Resource):
             return make_response(jsonify({
                 'message':'Invalid Token'
             }), 400)
-
-        del_report = report.delete_incident(id)
-        if not del_report:
+        # check_user = report.check_if_admin()
+        if user_id != 1:
+            del_report = report.delete_incident(id)
+            if not del_report:
+                return make_response(jsonify({
+                    'message':'Report has been deleted successfully'
+                }), 200)
+            else:
+                return make_response(jsonify({
+                    'message':'ID invalid, no report found'
+                }), 400)
+        return make_response(jsonify({
+            'message':'Admin can only edit the status'
+        }),400)
+            
+class EditStatus(Resource):
+    def patch(self,id):
+        user_header = request.headers.get('Authorization')
+        if not user_header:
             return make_response(jsonify({
-                'message':'Report has been deleted successfully'
-            }), 200)
-        else:
-            return make_response(jsonify({
-                'message':'ID invalid, no report found'
+                'message':'This is a Protected route. Please add a token to the header'
             }), 400)
+        access_token = user_header.split(" ")[1]
+        if not access_token:
+            return make_response(jsonify({
+                'message':'No token. Please put token in the Header'
+            }), 400)
+
+        user_id = decode_token(access_token)
+
+        if isinstance(user_id, str):
+            return make_response(jsonify({
+                'message':'Invalid Token'
+            }), 400)
+        
+        if user_id == 1:
+            try:
+                data = request.get_json()
+                updated_status = data['new_status']
+            except Exception:
+                return make_response(jsonify({
+                'message':'Invalid Key Field'
+            }), 400)
+            new_status = report.update_status(updated_status,id)
+            if new_status:
+                return make_response(jsonify({
+                    'message':'Status change successful',
+                    'report': new_status
+                }),200)
+            return make_response(jsonify({
+                'message':'Invalid ID'
+            }), 400)
+        return make_response(jsonify({
+            'message':'user is not allowed to edit status'
+        }),400)

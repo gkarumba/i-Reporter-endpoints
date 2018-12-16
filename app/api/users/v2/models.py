@@ -15,12 +15,16 @@ class User():
         retrieved_username = db.get_all(username_query)
         retrieved_email = db.get_all(email_query)
         
-
         if retrieved_username or retrieved_email:
             return False
         user_query = """INSERT INTO users (email,password,username,firstname,lastname,phonenumber) VALUES (%s,%s,%s,%s,%s,%s) RETURNING user_id"""
         tupl = (email,hash_password,username,firstname,lastname,phonenumber)
         repo = db.add_to_db(user_query,tupl)
+        user_id_query = """SELECT * FROM users WHERE user_id = '{}' """.format(1)
+        retrieve_user_id = db.get_one(user_id_query)
+        if retrieve_user_id:
+            admin_query = """UPDATE users SET isAdmin='{}' WHERE user_id={}""".format(True, 1)
+            add_admin = db.update_table_row(admin_query)
         payload = repo
         return payload
  
