@@ -4,7 +4,6 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from instance.config import CONFIGS
 
-
 env = os.getenv('FLASK_ENV')
 url = CONFIGS[env].DATABASE_URI
 
@@ -23,7 +22,8 @@ class ReportDB():
         password VARCHAR(5000) NOT NULL, 
         firstname VARCHAR(50) NOT NULL,
         lastname  VARCHAR(50) NOT NULL,
-        phonenumber INTEGER NOT NULL
+        phonenumber INTEGER NOT NULL,
+        isAdmin BOOLEAN default False
         );
         CREATE TABLE IF NOT EXISTS reports(
         report_id SERIAL PRIMARY KEY,
