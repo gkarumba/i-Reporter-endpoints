@@ -27,7 +27,7 @@ class User():
     def get_user_by_email(self, email):
         email_query = """SELECT * FROM users WHERE email = '{}'""".format(email)
         repo = db.get_all(email_query)
-        print(repo)
+        # print(repo)
         if not repo:
             return False
         return repo

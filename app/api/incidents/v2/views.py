@@ -6,7 +6,34 @@ from app.utilities.tokens import decode_token
 
 report = ReportIncident()
 
+# class ValidateToken(Resource):
+#     def validate_token(self):
+#         user_header = request.headers.get('Authorization')
+#         print(user_header)
+#         if not user_header:
+#             return make_response(jsonify({
+#                 'message':'This is a Protected route. Please add a token to the header'
+#             }), 400)
+#         access_token = user_header.split(" ")[1]
+#         print(access_token)
+#         if not access_token:
+#             return make_response(jsonify({
+#                 'message':'No token. Please put token in the Header'
+#             }), 400)
+        
+#         user_id = decode_token(access_token)
+#         print(user_id)
+#         if isinstance(user_id, str):
+#             return make_response(jsonify({
+#                 'message':'Invalid Token'
+#             }), 400)
+#         return False
+        
+        
 class ReportList(Resource):
+    # def __init__(self):
+    #     self.token = ValidateToken()
+    
     def post(self):
         user_header = request.headers.get('Authorization')
         if not user_header:
@@ -26,12 +53,12 @@ class ReportList(Resource):
                 'message':'Invalid Token'
             }), 400)
 
+        # if self.token.validate_token():
         try: 
             data = request.get_json()
             createdBy = data['createdBy']
             flag_type = data['flag_type']
             location = data['location']
-            status = data['status']
             comments = data['comments']
         except Exception:
             return make_response(jsonify({
@@ -50,21 +77,24 @@ class ReportList(Resource):
             return  make_response(jsonify({
                 'message':'Location cannot be blank'
             }), 400)
-        if not isBlank(status):
-            return  make_response(jsonify({
-                'message':'Status cannot be blank'
-            }), 400)
+        # if not isBlank(status):
+        #     return  make_response(jsonify({
+        #         'message':'Status cannot be blank'
+        #     }), 400)
         if not isBlank(comments):
             return make_response(jsonify({
                 'message':'Comments cannot be blank'
             }), 400)
 
-        response = report.create_incident(createdBy,flag_type,location,status,comments)
+        response = report.create_incident(createdBy,flag_type,location,comments)
 
         return make_response(jsonify({
                 'message':'Incident Created Successfully',
                 'data': response
             }), 201)
+    # return make_response(jsonify({
+    #     'message':'Incident Created Successfully',
+    # }), 400)
 
     def get(self):
         user_header = request.headers.get('Authorization')
@@ -127,6 +157,63 @@ class GetSingleReport(Resource):
         
     
 class EditReport(Resource):
+    # def patch(self,id, item):
+    #     user_header = request.headers.get('Authorization')
+    #     if not user_header:
+    #         return make_response(jsonify({
+    #             'message':'This is a Protected route. Please add a token to the header'
+    #         }), 400)
+    #     access_token = user_header.split(" ")[1]
+    #     if not access_token:
+    #         return make_response(jsonify({
+    #             'message':'No token. Please put token in the Header'
+    #         }), 400)
+
+    #     user_id = decode_token(access_token)
+
+    #     if isinstance(user_id, str):
+    #         return make_response(jsonify({
+    #             'message':'Invalid Token'
+    #         }), 400)
+
+    #     new_incident_list = ['new_comments','new_location']
+    #     data = request.get_json()
+    #     if item in new_incident_list and item in data:
+    #         if item == 'new_comments' or item == 'new_location':
+    #             updated_location = data['new_location']
+    #             updated_comments = data['new_comments']
+
+    #             if not isBlank(updated_location):
+    #                 return  make_response(jsonify({
+    #                     'message':'New_Location cannot be blank'
+    #                 }), 400)
+    #             if not isBlank(updated_comments):
+    #                 return make_response(jsonify({
+    #                     'message':'New_Comments cannot be blank'
+    #                 }), 400)
+
+    #             new_report = report.update_incident(updated_location,updated_comments,id)
+    #             if new_report:
+    #                 return make_response(jsonify({
+    #                     'message':'New Incident Updated',
+    #                     'data': new_report
+    #                 }), 201)
+    #             else:
+    #                 return make_response(jsonify({
+    #                     'message':'New Incident failed to update. Invalid ID'
+    #                 }), 400)
+    #         return make_response(jsonify({
+    #                     'message':'You are only allowed to update location or comment'
+    #                 }), 400)
+    #     return make_response(jsonify({
+    #                     'message':'please provide location or comment'
+    #                 }), 400)
+
+                
+                
+
+                
+        
     def put(self, id):
         user_header = request.headers.get('Authorization')
         if not user_header:
@@ -148,23 +235,18 @@ class EditReport(Resource):
 
         new_incident = request.get_json()
         updated_location = new_incident['new_location']
-        updated_status = new_incident['new_status']
         updated_comments = new_incident['new_comments']
 
         if not isBlank(updated_location):
             return  make_response(jsonify({
                 'message':'New_Location cannot be blank'
             }), 400)
-        if not isBlank(updated_status):
-            return  make_response(jsonify({
-                'message':'New_Status cannot be blank'
-            }), 400)
         if not isBlank(updated_comments):
             return make_response(jsonify({
                 'message':'New_Comments cannot be blank'
             }), 400)
 
-        new_report = report.update_incident(updated_location,updated_status,updated_comments,id)
+        new_report = report.update_incident(updated_location,updated_comments,id)
         if new_report:
             return make_response(jsonify({
                 'message':'New Incident Updated',

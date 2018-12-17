@@ -1,6 +1,6 @@
 import unittest
 import json
-
+from app import create_app
 from app.api.users.v1.database import ReportDB
 
 db = ReportDB()
@@ -33,36 +33,43 @@ class LoginTestCase(unittest.TestCase):
             'password' : 'Zhunguoren'
         }
 
-    def tearDown(self):
-        db.drop_table()
     
     def test_registered_login(self):
-        response = self.app.post('user/v2/register',data=json.dumps(self.register_data),content_type='application/json')
+        response = self.app.post('/users/v2/registration',data=json.dumps(self.register_data),content_type='application/json')
         result = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
-        response1 = self.app.post('user/v2/login',data=json.dumps(self.data),content_type='application/json')
+        response1 = self.app.post('/users/v2/login',data=json.dumps(self.login_data),content_type='application/json')
         result1 = json.loads(response1.data)
+        # import pdb; pdb.set_trace()
         self.assertEqual(response1.status_code,200)
-        self.assertIn('Successfully logged in', str(result))
+        self.assertIn(result1['message'],'Successfully logged in')
 
     def test_unregistered_login(self):
-        response = self.app.post('user/v2/register',data=json.dumps(self.register_data),content_type='application/json')
+        # response = self.app.post('/users/v2/registration',data=json.dumps(self.register_data),content_type='application/json')
+        # result = json.loads(response.data)
+        # self.assertEqual(response.status_code, 201)
+        response = self.app.post('/users/v2/login',data=json.dumps(self.unregistered_data),content_type='application/json')
+        # import pdb; pdb.set_trace()
         result = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
-        response1 = self.app.post('user/v2/login',data=json.dumps(self.unregistered_data),content_type='application/json')
-        result1 = json.loads(response1.data)
-        self.assertEqual(response1.status_code,401)
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code,401)
         self.assertIn('incorrect login credentials. please enter details again', str(result))
 
-    def test_invalid_data(self):
-        response = self.app.post('user/v2/register',data=json.dumps(self.register_data),content_type='application/json')
-        result = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
-        response1 = self.app.post('user/v2/login',data=json.dumps(self.invalid_data),content_type='application/json')
-        result1 = json.loads(response1.data)
-        self.assertEqual(response1.status_code,400)
-        self.assertIn('Invalid data, try again', str(result))
 
+    def test_invalid_data(self):
+        response = self.app.post('/users/v2/registration',data=json.dumps(self.register_data),content_type='application/json')
+        result = json.loads(response.data)
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, 201)
+        response1 = self.app.post('/users/v2/login',data=json.dumps(self.invalid_data),content_type='application/json')
+        result1 = json.loads(response1.data)
+        #import pdb; pdb.set_trace()
+        self.assertEqual(response1.status_code, 400)
+        self.assertIn(result1['message'], 'Invalid data, try again')
+
+    def tearDown(self):
+        db.drop_table()
+        
 if __name__ == '__main__':
     unittest.main()
     

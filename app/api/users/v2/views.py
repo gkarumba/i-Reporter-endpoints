@@ -84,7 +84,6 @@ class LogIn(Resource):
             }), 400)
 
         user_login = user.get_user_by_email(email)
-        login_id = user_login[0]['user_id']
         if not user_login:
             return make_response(jsonify( {
                 'message' : 'incorrect login credentials. please enter details again'
@@ -95,6 +94,7 @@ class LogIn(Resource):
             return make_response(jsonify({
                 'message' : 'incorrect login credentials. please enter details again'
             }), 401)
+        login_id = user_login[0]['user_id']
         user_token = user.generate_token(login_id)
         
         if not user_token:

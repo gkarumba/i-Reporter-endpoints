@@ -31,6 +31,7 @@ class TestReportCreation(unittest.TestCase):
             "image": "image.png",
             "video": "video"
         } 
+        
         # self.data2 = {
         #     "username": "peter",
         #     "flag": "redflag",
