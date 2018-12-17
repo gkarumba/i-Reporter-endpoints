@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import make_response,jsonify, request
 from app.api.users.v1.models import User
-from app.utilities.validators import isValidEmail,isValidPassword,isValidUsername,isValidSpace,isBlank,isNumber
+from app.utilities.validators import is_valid_email,is_valid_password,is_valid_username,is_valid_space,is_blank,is_number
 
 class Registration(Resource):
     
@@ -14,15 +14,15 @@ class Registration(Resource):
         username = data['username']
         phonenumber = data['phonenumber']
         
-        if not isValidEmail(email) and not isValidSpace(email):
+        if not is_valid_email(email) and not isValidSpace(email):
             return make_response(jsonify({
                 'message':'Invalid email format'
                 }), 400)
-        if not isValidPassword(password):
+        if not is_valid_password(password):
             return make_response(jsonify({
                 'message':'Password is a max of 8 characters and cannot be empty'
                 }), 400)
-        if  not isBlank(firstname) and not isValidUsername(firstname):
+        if  not isBlank(firstname) and not is_valid_username(firstname):
             return make_response(jsonify({
                 'message':'Firstname cannot be empty and takes letters only'
                 }), 400)  

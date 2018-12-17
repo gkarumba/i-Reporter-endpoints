@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import make_response,jsonify, request
 from app.api.users.v2.models import User
-from app.utilities.validators import isBlank,isNumber,isValidEmail,isValidPassword,isValidSpace,isValidUsername
+from app.utilities.validators import is_blank,is_number,is_valid_email,is_valid_password,is_valid_space,is_valid_username,is_status
 
 user = User()
 
@@ -21,35 +21,34 @@ class Registration(Resource):
                 'message' : 'Invalid key field'
             }), 400)
         
-        if not isValidEmail(email):
+        if not is_valid_email(email):
             return make_response(jsonify({
                 'message':'Invalid email format'
                 }), 400)
-        if not isValidPassword(password):
+        if not is_valid_password(password):
             return make_response(jsonify({
                 'message':'Password is a max of 8 characters and cannot be empty'
                 }), 400)
-        if not isValidUsername(firstname):
+        if not is_valid_username(firstname) or not is_blank(firstname):
             return make_response(jsonify({
                 'message':'Firstname cannot be empty and takes letters only'
                 }), 400)  
-        if not isValidUsername(lastname): 
+        if not is_valid_username(lastname)or not is_blank(lastname): 
             return make_response(jsonify({
                 'message':'Lastname cannot be empty and takes letters only'
                 }), 400)
-        if not isValidUsername(username):
+        if not is_valid_username(username) or not is_blank(username):
             return make_response(jsonify({
                 'message':'Username cannot be empty and takes letters only'
                 }),400)
-        if not isNumber(phonenumber):
+        if not is_number(phonenumber) or not is_blank(phonenumber):
             return make_response(jsonify({
-                'message':'Phonenumber should be in numerals'
+                'message':'Phonenumber cannot be empty and should be in numerals'
                 }),400)
-        
+         
         new_user = user.add_user(email,password,username,firstname,lastname,phonenumber)
 
         if new_user:
-            # new_user = user.add_user(email,password,username,firstname,lastname,phonenumber)
             return make_response(jsonify({
               'message':'Your account has successfully been registered',
               'data': new_user
@@ -58,19 +57,6 @@ class Registration(Resource):
             return make_response(jsonify({
             'message':'email already exists. Use a different email'
             }), 409)
-        #if not user.get_user_by_email(email):
-        #     new_user = user.add_user(email,password,username,firstname,lastname,phonenumber)
-        
-        # if not new_user:
-        #     return make_response(jsonify({
-        #       'message' : 'Email already exists'
-        #     }), 400)
-        # return make_response(jsonify({
-        #     'message' : 'Account Registered Successfully',
-        #     'data' : new_user
-        # }), 201) 
-
-
 
 class LogIn(Resource):
     def post(self):
