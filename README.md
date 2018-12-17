@@ -6,6 +6,7 @@ This repo is a build of the API endpoints for an online reporting platform
 
 ## RESTful API Endpoints for ireporter
 
+
 | Method        |       Endpoint                     |         Description               |    Example        |
 | ------------- |       -------------                |         -------------             |  ------------     |
 | `POST`        | `/api/v2/reports`                  |   Creates a new report            |    `POST`         |
@@ -16,7 +17,6 @@ This repo is a build of the API endpoints for an online reporting platform
 | `PATCH`       | `api/v2/reports/status/<reportid>` |   Edits the status                |                   |
 | `PATCH`       |`api/v2/reports/location/<reportid>`|   Edits the location              |                   |
 | `PATCH`       | `api/v2/reports/comment/<reportid>`|   Edits the comment               |                   |
-
 
                                                                                     
 
