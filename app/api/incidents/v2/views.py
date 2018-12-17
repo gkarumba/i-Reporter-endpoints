@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import make_response, jsonify, request
-from app.utilities.validators import is_valid_username,is_blank,is_status,is_location
+from app.utilities.validators import is_valid_username,is_blank,is_status,is_location,is_flag
 from app.api.incidents.v2.models import ReportIncident
 from app.utilities.tokens import decode_token
 
@@ -36,9 +36,9 @@ class ReportList(Resource):
                 'message':'Invalid key field'
             }),400)
 
-        if not is_blank(flag_type):
+        if not is_blank(flag_type) or not is_flag(flag_type):
             return  make_response(jsonify({
-                'message':'Flag_type cannot be _blank'
+                'message':'Flag_type cannot be _blank.Use valid flag_type'
             }),400)
         if not is_blank(location) or not is_location(location):
             return  make_response(jsonify({
@@ -85,17 +85,21 @@ class ReportList(Resource):
             return make_response(jsonify({
                 'message':'Invalid Token'
             }),400)
-        
-        resp = report.incident_list()
+        # check_createdby = report.check_user_id(id)
+        # if check_createdby['createdby'] == user_id:
+        resp = report.incident_list(user_id)
         if resp: 
             return make_response(jsonify({
                 'message':'OK',
-                'data': resp
+                'reports': resp
             }),200)
         else:
             return make_response(jsonify({
                 'message':'Invalid report ID, no report found'
             }),404)
+        # return make_response(jsonify({
+        #     'message':'User can only retrieve the reports they created'
+        # }),400)
 
 class GetSingleReport(Resource):
     def get(self,id):
@@ -116,17 +120,21 @@ class GetSingleReport(Resource):
             return make_response(jsonify({
                 'message':'Invalid Token'
             }), 400)
-
-        response  = report.get_one_incident(id)
-        if response:
-            return make_response(jsonify({
-                'message':'OK',
-                'data': response
-            }),200)
-        else:
-            return make_response(jsonify({
-                'message':'Invalid report ID, no report found'
-            }),404)
+        check_createdby = report.check_user_id(id)
+        if check_createdby['createdby'] == user_id:
+            response  = report.get_one_incident(id)
+            if response:
+                return make_response(jsonify({
+                    'message':'OK',
+                    'report': response
+                }),200)
+            else:
+                return make_response(jsonify({
+                    'message':'Invalid report ID, no report found'
+                }),404)
+        return make_response(jsonify({
+            'message':'User can only retrieve the reports they created'
+        }),400)
     
 class EditLocation(Resource):
     def patch(self,id):
@@ -161,16 +169,21 @@ class EditLocation(Resource):
             }),400)
 
         if user_id != 1:
-            new_report = report.update_location(updated_location,id)
-            if new_report:
-                return make_response(jsonify({
-                        'message':'Report has been edited successfully',
-                        'report': new_report
-                    }),200)
-            else:
-                return make_response(jsonify({
-                    'message':'Invalid report ID, no report found'
-                }),404)
+            check_createdby = report.check_user_id(id)
+            if check_createdby['createdby'] == user_id:
+                new_report = report.update_location(updated_location,id)
+                if new_report:
+                    return make_response(jsonify({
+                            'message':'Report has been edited successfully',
+                            'report': new_report
+                        }),200)
+                else:
+                    return make_response(jsonify({
+                        'message':'Invalid report ID, no report found'
+                    }),404)
+            return make_response(jsonify({
+                        'message':'User can only edit the reports they created'
+                    }),400)
         return make_response(jsonify({
             'message':'Admin can only edit the status'
         }),400)
@@ -208,16 +221,21 @@ class EditComment(Resource):
             }),400)
 
         if user_id != 1:
-            new_report = report.update_comment(updated_comment,id)
-            if new_report:
-                return make_response(jsonify({
-                    'message':'Report has been edited successfully',
-                    'report': new_report
-                }),200) 
-            else:
-                return make_response(jsonify({
-                    'message':'Invalid report ID, no report found'
-                }),404)
+            check_createdby = report.check_user_id(id)
+            if check_createdby['createdby'] == user_id:
+                new_report = report.update_comment(updated_comment,id)
+                if new_report:
+                    return make_response(jsonify({
+                        'message':'Report has been edited successfully',
+                        'report': new_report
+                    }),200) 
+                else:
+                    return make_response(jsonify({
+                        'message':'Invalid report ID, no report found'
+                    }),404)
+            return make_response(jsonify({
+                'message':'User can only edit the reports they created'
+            }),400)
         return make_response(jsonify({
             'message':'Admin can only edit the status'
         }),400)     
@@ -254,16 +272,21 @@ class Editflag(Resource):
             }),400)
         check_user = report.check_if_admin()
         if user_id != 1:
-            new_report = report.update_flag(updated_flag,id)
-            if new_report:
-                return make_response(jsonify({
-                        'message':'Report has been edited successfully',
-                        'report': new_report
-                    }),200)
-            else:
-                return make_response(jsonify({
-                    'message':'Invalid report ID, no report found'
-                }),404)
+            check_createdby = report.check_user_id(id)
+            if check_createdby['createdby'] == user_id:
+                new_report = report.update_flag(updated_flag,id)
+                if new_report:
+                    return make_response(jsonify({
+                            'message':'Report has been edited successfully',
+                            'report': new_report
+                        }),200)
+                else:
+                    return make_response(jsonify({
+                        'message':'Invalid report ID, no report found'
+                    }),404)
+            return make_response(jsonify({
+                'message':'User can only edit the reports they created'
+            }),400)
         return make_response(jsonify({
             'message':'Admin can only edit the status'
         }),400)
@@ -290,15 +313,20 @@ class DeleteReport(Resource):
             }),400)
 
         if user_id != 1:
-            del_report = report.delete_incident(id)
-            if not del_report:
-                return make_response(jsonify({
-                    'message':'Report has been deleted successfully'
-                }),200)
-            else:
-                return make_response(jsonify({
-                    'message':'Invalid report ID, no report found'
-                }),404)
+            check_createdby = report.check_user_id(id)
+            if check_createdby['createdby'] == user_id:
+                del_report = report.delete_incident(id)
+                if not del_report:
+                    return make_response(jsonify({
+                        'message':'Report has been deleted successfully'
+                    }),200)
+                else:
+                    return make_response(jsonify({
+                        'message':'Invalid report ID, no report found'
+                    }),404)
+            return make_response(jsonify({
+                'message':'User can only edit the reports they created'
+            }),400)
         return make_response(jsonify({
             'message':'Admin can only edit the status'
         }),400)
@@ -344,7 +372,6 @@ class EditStatus(Resource):
             return make_response(jsonify({
                 'message':'Invalid report ID, no report found'
             }),404)
-            
         return make_response(jsonify({
             'message':'user is not allowed to edit status'
         }),400)

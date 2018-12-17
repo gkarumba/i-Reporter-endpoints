@@ -30,6 +30,13 @@ class ReportIncident:
         db.save_to_db(load_query,tupl)
         return payload
         
+    def check_user_id(self,report_id):
+        check_query = """SELECT createdBy FROM reports WHERE report_id ='{}'""".format(report_id)
+        response = db.get_one(check_query)
+        if not response:
+            return False
+        return response
+
     def check_if_admin(self):
         check_query = """ SELECT user_id FROM users WHERE user_id=(select min(user_id) from users);"""
         check_admin = db.get_one(check_query)
@@ -44,11 +51,11 @@ class ReportIncident:
             return False
         return response
 
-    def incident_list(self):
+    def incident_list(self,user_id):
         """
         Gets all the reports 
         """
-        query = """SELECT createdBy,flag_type,createdOn,location,status,comments,report_id FROM reports ORDER BY report_id ASC;"""
+        query = """SELECT createdBy,flag_type,createdOn,location,status,comments,report_id FROM reports WHERE createdby ='{}' ORDER BY report_id ASC;""".format(user_id)
         respo = db.get_all(query)
         return respo
 
