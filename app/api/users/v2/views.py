@@ -1,13 +1,20 @@
 from flask_restful import Resource
 from flask import make_response,jsonify, request
+#local imports
 from app.api.users.v2.models import User
 from app.utilities.validators import is_blank,is_number,is_valid_email,is_valid_password,is_valid_space,is_valid_username,is_status
 
 user = User()
 
 class Registration(Resource):
+    """
+        Class for the methods of POST(registering a user)
+    """
     
     def post(self):
+    """
+        Method for registering a new user
+    """
         try:
             data = request.get_json()
             password = data['password']
@@ -59,7 +66,13 @@ class Registration(Resource):
             }), 409)
 
 class LogIn(Resource):
+    """
+        Class for POST method of login a registered user
+    """
     def post(self):
+    """
+        Method for login a registered user
+    """
         try:
             data = request.get_json()
             email = data['email']

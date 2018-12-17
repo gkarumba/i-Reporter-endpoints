@@ -1,11 +1,14 @@
 from flask import Blueprint
 from flask_restful import Api
+#local imports
 from app.api.incidents.v2.views import ReportList,EditLocation,DeleteReport,GetSingleReport,EditComment,Editflag,EditStatus
 
 version_two = Blueprint('api_v2',__name__, url_prefix='/api/v2')
 
 api = Api(version_two)
-
+"""
+    Adding the resources urls for the different endpoints
+"""
 api.add_resource(ReportList,'/reports')
 api.add_resource(EditLocation,'/reports/location/<int:id>')
 api.add_resource(DeleteReport,'/reports/<int:id>')

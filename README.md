@@ -18,8 +18,6 @@ This repo is a build of the API endpoints for an online reporting platform
 | `PATCH`       |`api/v2/reports/location/<reportid>`|   Edits the location              |                   |
 | `PATCH`       | `api/v2/reports/comment/<reportid>`|   Edits the comment               |                   |
 
-
-
                                                                                     
 
 ## Getting Started

@@ -13,7 +13,6 @@ def create_app(config_name="development_config"):
     """
     Initialize flask app instance and configure it
     """
-
     app = Flask(__name__,instance_relative_config=True)
     app.config.from_object(config.CONFIGS[config_name])
     db.start_db(app.config['DATABASE_URI'])
