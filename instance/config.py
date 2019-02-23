@@ -3,7 +3,7 @@ import os
 class DevConfig:
     """ Parent Configuration Class"""
     DEBUG = True
-    SECRET_KEY = 'is-it-that-hard-to-figure-it-out'
+    SECRET_KEY = 'nova_catharge_hasdrubal-260BC-200BCE'
     CSRF_ENABLED = True
     TEST = False
 

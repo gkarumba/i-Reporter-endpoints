@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import make_response,jsonify, request
+import json
 #local imports
 from app.api.users.v2.models import User
 from app.utilities.validators import is_blank,is_number,is_valid_email,is_valid_password,is_valid_space,is_valid_username,is_status
@@ -12,9 +13,9 @@ class Registration(Resource):
     """
     
     def post(self):
-    """
-        Method for registering a new user
-    """
+        """
+            Method for registering a new user
+        """
         try:
             data = request.get_json()
             password = data['password']
@@ -70,9 +71,9 @@ class LogIn(Resource):
         Class for POST method of login a registered user
     """
     def post(self):
-    """
-        Method for login a registered user
-    """
+        """
+            Method for login a registered user
+        """
         try:
             data = request.get_json()
             email = data['email']
@@ -94,7 +95,10 @@ class LogIn(Resource):
                 'message' : 'incorrect login credentials. please enter details again'
             }), 401)
         login_id = user_login[0]['user_id']
+        print(login_id)
         user_token = user.generate_token(login_id)
+        print(user_token)
+        
         
         if not user_token:
             return make_response(jsonify( {
