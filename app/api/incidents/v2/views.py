@@ -13,9 +13,9 @@ class ReportList(Resource):
     """
     
     def post(self):
-    """
-        Method for posting a new report
-    """
+        """
+            Method for posting a new report
+        """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -75,9 +75,9 @@ class ReportList(Resource):
         }), 400)
 
     def get(self):
-    """
-        Method for retrieving all reports 
-    """
+        """
+            Method for retrieving all reports 
+        """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -117,9 +117,9 @@ class GetSingleReport(Resource):
     """
     
     def get(self,id):
-    """
-        Method for retrieving a report created by the logged in user
-    """
+        """
+            Method for retrieving a report created by the logged in user
+        """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -158,9 +158,9 @@ class EditLocation(Resource):
         Class for the method of patching the location
     """
     def patch(self,id):
-    """
-        Method for patching the location
-    """
+        """
+            Method for patching the location
+        """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -216,9 +216,9 @@ class EditComment(Resource):
         Class for the method of patching the comments
     """
     def patch(self,id):
-    """
-        Method for patching the comments
-    """
+        """
+            Method for patching the comments
+        """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -274,9 +274,9 @@ class Editflag(Resource):
         Class for the method of patching the flag_type
     """
     def patch(self,id):
-    """
-        Method for patching the flag_type
-    """
+        """
+            Method for patching the flag_type
+        """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -332,9 +332,9 @@ class DeleteReport(Resource):
         Class for the method of deleting a specific report
     """
     def delete(self,id):
-    """
-        Method of deleting a specific report
-    """
+        """
+            Method of deleting a specific report
+        """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
@@ -377,9 +377,9 @@ class EditStatus(Resource):
         Class for the method of patching the status
     """
     def patch(self,id):
-    """
-        Method of patching the status
-    """
+        """
+            Method of patching the status
+        """
         user_header = request.headers.get('Authorization')
         if not user_header:
             return make_response(jsonify({
