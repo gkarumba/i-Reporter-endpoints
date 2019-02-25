@@ -137,6 +137,11 @@ class GetSingleReport(Resource):
             return make_response(jsonify({
                 'message':'Invalid Token'
             }), 400)
+        resp = report.get_one_incident(id)
+        if not resp:
+            return make_response(jsonify({
+            'message':'No incident found'
+        }),400)
         check_createdby = report.check_user_id(id)
         if check_createdby['createdby'] == user_id:
             response  = report.get_one_incident(id)
@@ -190,8 +195,17 @@ class EditLocation(Resource):
             return make_response(jsonify({
                 'message':'new_location cannot be empty'
             }),400)
+        if not is_location(updated_location):
+            return make_response(jsonify({
+                'message':'use the correct location format'
+            }),400)
 
         if user_id != 1:
+            resp = report.get_one_incident(id)
+            if not resp:
+                return make_response(jsonify({
+                'message':'No incident found'
+            }),400)
             check_createdby = report.check_user_id(id)
             if check_createdby['createdby'] == user_id:
                 new_report = report.update_location(updated_location,id)
@@ -250,7 +264,14 @@ class EditComment(Resource):
             }),400)
 
         if user_id != 1:
+            resp = report.get_one_incident(id)
+            if not resp:
+                return make_response(jsonify({
+                'message':'No incident found'
+            }),400)
+
             check_createdby = report.check_user_id(id)
+            print(check_createdby['createdby'])
             if check_createdby['createdby'] == user_id:
                 new_report = report.update_comment(updated_comment,id)
                 if new_report:
@@ -305,8 +326,17 @@ class Editflag(Resource):
             return make_response(jsonify({
                 'message':'new_flag cannot be empty'
             }),400)
+        if not is_flag(updated_flag):
+            return make_response(jsonify({
+                'message':'Use the correct flag format'
+            }),400)
         check_user = report.check_if_admin()
         if user_id != 1:
+            resp = report.get_one_incident(id)
+            if not resp:
+                return make_response(jsonify({
+                'message':'No incident found'
+            }),400)
             check_createdby = report.check_user_id(id)
             if check_createdby['createdby'] == user_id:
                 new_report = report.update_flag(updated_flag,id)
@@ -354,6 +384,11 @@ class DeleteReport(Resource):
             }),400)
 
         if user_id != 1:
+            resp = report.get_one_incident(id)
+            if not resp:
+                return make_response(jsonify({
+                'message':'No incident found'
+            }),400)
             check_createdby = report.check_user_id(id)
             if check_createdby['createdby'] == user_id:
                 del_report = report.delete_incident(id)

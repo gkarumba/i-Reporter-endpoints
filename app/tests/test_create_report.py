@@ -18,7 +18,7 @@ class TestReportCreation(unittest.TestCase):
         self.data = {
             "username": "john",
             "flag": "redflag",
-            "location": "PAC",
+            "location": "12.786,89.098",
             "status": "resolved",
             "image": "image.png",
             "video": "video.mkv"
@@ -26,7 +26,7 @@ class TestReportCreation(unittest.TestCase):
         self.data1 = {
             "username": "peter",
             "flag": "redflag",
-            "location": "PAC",
+            "location": "12.786,89.098",
             "status": "resolved",
             "image": "image.png",
             "video": "video"

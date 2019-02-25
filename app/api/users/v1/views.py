@@ -14,7 +14,7 @@ class Registration(Resource):
         username = data['username']
         phonenumber = data['phonenumber']
         
-        if not is_valid_email(email) and not isValidSpace(email):
+        if not is_valid_email(email) and not is_valid_space(email):
             return make_response(jsonify({
                 'message':'Invalid email format'
                 }), 400)
@@ -22,19 +22,19 @@ class Registration(Resource):
             return make_response(jsonify({
                 'message':'Password is a max of 8 characters and cannot be empty'
                 }), 400)
-        if  not isBlank(firstname) and not is_valid_username(firstname):
+        if  not is_blank(firstname) and not is_valid_username(firstname):
             return make_response(jsonify({
                 'message':'Firstname cannot be empty and takes letters only'
                 }), 400)  
-        if not isBlank(lastname) and not isValidUsername(lastname): 
+        if not is_blank(lastname) and not isValidUsername(lastname): 
             return make_response(jsonify({
                 'message':'Lastname cannot be empty and takes letters only'
                 }), 400)
-        if not isBlank(username) and not isValidUsername(username):
+        if not is_blank(username) and not isValidUsername(username):
             return make_response(jsonify({
                 'message':'Username cannot be empty and takes letters only'
                 }),400)
-        if not isNumber(phonenumber):
+        if not is_number(phonenumber):
             return make_response(jsonify({
                 'message':'Phonenumber should be in numerals'
                 }),400)
