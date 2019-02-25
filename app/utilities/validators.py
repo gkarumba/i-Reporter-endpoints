@@ -91,11 +91,11 @@ def is_image(img):
         return True
     return False
 
-def is_video(video):
+def is_video(vid):
     """
         Method that checks for the correct video format
     """
-    if re.match(r".*\.(mp4|mkv|3gp)$", video):
+    if re.match(r".*\.(mp4|mkv|3gp)$", vid):
         return True
     return False
 

@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify, make_response, request
 from .models import Reports, incident,db
-from app.utilities.validators import is_valid_username,is_blank,is_image,is_video
+from app.utilities.validators import is_valid_username,is_blank,is_image,is_video,is_status,is_location,is_flag
 
 class ReportLists(Resource):
     """
@@ -19,6 +19,7 @@ class ReportLists(Resource):
         image = data['image']
         video = data['video']
         #comment = ['comment']
+
         
         if not is_valid_username(createdBy):
             return make_response(jsonify({
@@ -30,19 +31,19 @@ class ReportLists(Resource):
                 'message':'Username cannot be empty'
             }), 400)
 
-        if not is_blank(flag):
+        if not is_flag(flag):
             return make_response(jsonify({
                 'message':'type cannot be empty'
             }), 400)
 
-        if not is_blank(location):
+        if not is_location(location):
             return make_response(jsonify({
-                'message':'location cannot be empty'
+                'message':'Use the correct location format'
             }),400)
 
-        if not is_blank(status):
+        if not is_status(status):
             return make_response(jsonify({
-                'message':'status cannot be empty'
+                'message':'Use the correct status format'
             }), 400)
         if not is_image(image):
             return make_response(jsonify({

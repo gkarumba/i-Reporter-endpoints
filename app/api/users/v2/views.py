@@ -95,10 +95,9 @@ class LogIn(Resource):
                 'message' : 'incorrect login credentials. please enter details again'
             }), 401)
         login_id = user_login[0]['user_id']
-        print(login_id)
+        # print(login_id)
         user_token = user.generate_token(login_id)
-        print(user_token)
-        
+        # print(user_token)
         
         if not user_token:
             return make_response(jsonify( {
