@@ -1,12 +1,29 @@
 language: python
+
 python:
-  - "2.7"
+  - 3.6.7
+
 # command to install dependencies
 install:
-  - pip install -r requirements.txt
+  -  pip install -r requirements.txt
+  -  pip install coveralls
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c "create database ireporter;" -U postgres
+  - psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to postgres;" -U postgres
+
 # command to run tests
 script:
-  - nosetests --with-coverage --cover-package=app 
+  - export FLASK_ENV="development_config"
+  - export DATABASE_URL="dbname='ireporter'host='localhost'port='5432'user='postgres'password='123456'"
+  - export SECRET_KEY="nova_catharge_hasdrubal-260BC-200BCE"
+  - nosetests --with-coverage --cover-package=app  
 
+branches:
+  only:
+    - develop
 after_success:
   - coveralls
